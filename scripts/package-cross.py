@@ -33,10 +33,10 @@ def icns(destination: Path) -> None:
     destination.write_bytes(b'icns' + struct.pack('>I', len(payload) + 8) + payload)
 
 
-def notices(destination: Path, runtime: str) -> None:
+def notices(destination: Path, runtime: str, assets_path: Path) -> None:
     target = destination / 'THIRD-PARTY'
     target.mkdir()
-    assets = json.loads((ROOT / 'src/AiGuardLock.CrossPlatform/obj/project.assets.json').read_text(encoding='utf-8-sig'))
+    assets = json.loads(assets_path.read_text(encoding='utf-8-sig'))
     package_folders = [Path(p) for p in assets['packageFolders']]
     for item in (ROOT / 'docs/third-party').glob('*.txt'):
         shutil.copy2(item, target / item.name)
@@ -74,6 +74,7 @@ def main() -> None:
     parser.add_argument('--runtime', choices=['linux-x64', 'linux-arm64', 'osx-x64', 'osx-arm64'], required=True)
     parser.add_argument('--version', required=True)
     parser.add_argument('--publish', type=Path, required=True)
+    parser.add_argument('--assets', type=Path, default=ROOT / 'src/AiGuardLock.CrossPlatform/obj/project.assets.json')
     args = parser.parse_args()
     name = f'AI-Guard-Lock-{args.version}-{args.runtime}-preview'
     destination = ROOT / 'dist' / name
@@ -108,7 +109,7 @@ def main() -> None:
         launcher = '#!/bin/sh\nset -eu\nbase=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)\nexec "$base/app/AiGuardLock.Portable" "$@"\n'
         (destination / 'launch.sh').write_text(launcher, encoding='utf-8', newline='\n')
     shutil.copy2(ROOT / 'docs/CROSS-PLATFORM-JA.txt', destination / 'README-JA.txt')
-    notices(destination, args.runtime)
+    notices(destination, args.runtime, args.assets)
     sums = []
     for path in sorted(destination.rglob('*')):
         if path.is_file():

@@ -1,4 +1,4 @@
-AI Guard Lock — macOS / Linux 試用版 1.0.0
+AI Guard Lock — macOS / Linux 試用版
 
 【機能】
 主画面を半透明で覆い、アプリ専用PIN（半角数字4〜12桁）またはパスワード（8〜128文字）で解除します。

@@ -1,4 +1,4 @@
-AI Guard Lock 1.0.0 — ポータブル版
+AI Guard Lock — ポータブル版
 
 【別のPCで使う】
 1. ZIPをUSBメモリーなどで移します。

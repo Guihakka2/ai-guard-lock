@@ -1,7 +1,7 @@
 param(
     [ValidateSet('win-x64', 'win-arm64')]
     [string]$Runtime = 'win-x64',
-    [string]$Version = '1.0.0'
+    [string]$Version = '1.0.1'
 )
 $ErrorActionPreference = 'Stop'
 if ($Version -notmatch '^\d+\.\d+\.\d+$') { throw 'Version must have the form 1.0.0.' }
@@ -27,7 +27,7 @@ try {
     & $dotnetExe publish 'src/AiGuardLock/AiGuardLock.csproj' -c Release -r $Runtime --self-contained true `
         -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:PublishTrimmed=false `
         -p:DebugType=None -p:DebugSymbols=false -p:Version=$Version --configfile NuGet.Config `
-        --packages $packageRoot -o $destination
+        --artifacts-path ".artifacts/publish-build/$Version/$Runtime" --packages $packageRoot -o $destination
     if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }
     Copy-Item -LiteralPath 'docs/PORTABLE-JA.txt' -Destination (Join-Path $destination 'README-JA.txt')
     Copy-Item -LiteralPath 'scripts/portable-shortcut.ps1' -Destination (Join-Path $destination 'Create-Desktop-Shortcut.ps1')
