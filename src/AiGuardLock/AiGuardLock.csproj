@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.22000.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>Assets/AppIcon.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Product>AI Guard Lock</Product>
+    <Description>Translucent screen cover with Windows Hello or local PIN unlock</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Resource Include="Assets/AppIcon.ico" />
+    <ProjectReference Include="../AiGuardLock.Core/AiGuardLock.Core.csproj" />
+    <InternalsVisibleTo Include="AiGuardLock.Tests" />
+  </ItemGroup>
+</Project>

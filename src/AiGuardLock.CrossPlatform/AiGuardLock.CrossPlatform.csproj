@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>AiGuardLock.Portable</AssemblyName>
+    <Version>1.0.0</Version>
+    <ApplicationIcon>../AiGuardLock/Assets/AppIcon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
+    <ProjectReference Include="../AiGuardLock.Core/AiGuardLock.Core.csproj" />
+    <AvaloniaResource Include="../AiGuardLock/Assets/AppIcon.png" Link="Assets/AppIcon.png" />
+    <InternalsVisibleTo Include="AiGuardLock.CrossPlatform.Tests" />
+  </ItemGroup>
+</Project>

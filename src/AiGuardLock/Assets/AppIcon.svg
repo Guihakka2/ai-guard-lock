@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <title>AI Guard Lock 窶・teal shield and keyhole</title>
+  <defs>
+    <linearGradient id="tile" x2="1" y2="1"><stop stop-color="#173B4C"/><stop offset="1" stop-color="#0B192A"/></linearGradient>
+    <linearGradient id="shield" x2="0.8" y2="1"><stop stop-color="#9CF0DF"/><stop offset="1" stop-color="#0AA89F"/></linearGradient>
+  </defs>
+  <rect x="20" y="20" width="472" height="472" rx="108" fill="url(#tile)"/>
+  <path d="M256,78 C216,105 159,122 112,128 L112,238 C112,325 173,391 256,434 C339,391 400,325 400,238 L400,128 C353,122 296,105 256,78 Z" fill="url(#shield)"/>
+  <path d="M140,149 C181,142 223,126 256,107 C289,126 331,142 372,149" fill="none" stroke="#D4FFF3" stroke-width="6" stroke-linecap="round" opacity="0.65"/>
+  <path d="M256,176 C228,176 206,198 206,226 C206,245 217,262 233,271 L222,326 L290,326 L279,271 C295,262 306,245 306,226 C306,198 284,176 256,176 Z" fill="#102C3C"/>
+</svg>

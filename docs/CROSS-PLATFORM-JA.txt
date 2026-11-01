@@ -1,0 +1,43 @@
+AI Guard Lock — macOS / Linux 試用版 1.0.0
+
+【機能】
+主画面を半透明で覆い、アプリ専用PIN（半角数字4〜12桁）またはパスワード（8〜128文字）で解除します。
+Windows Hello、Touch ID、macOSログイン認証、Linux PAM認証はこの版にはありません。
+今回の表示中だけ有効で、PIN・パスワードをファイルに保存しません。
+画面切替・プロセス終了を防ぐOSのロック機能ではありません。背景の情報は透けて見えます。
+スリープ・スクリーンセーバー・OS自動ロックの設定は変更しません。
+
+【実機確認について】
+Windows上で共通コードのビルドと自動テストを行い、各OS用にクロスビルドした試用版です。
+macOS・Linuxの実機での起動・透過表示・フォーカス・解除は未確認です。
+初回は機密情報を表示せず、自動解除「2分」で試してください。
+復旧時はmacOSの強制終了、LinuxのシステムモニターでAI Guard Lockを終了できます。
+合成処理が使えず半透明表示にならない場合は、カバーを閉じて設定画面へ戻す設計です。
+
+【macOS】
+対象目安：macOS 14以降。Apple Siliconはosx-arm64、Intel Macはosx-x64を選びます。
+ZIPを展開すると AI Guard Lock.app が入っています。.NETは同梱しています。
+アプリアイコンはWindows版と同じシールドと鍵穴です。
+この.appは未署名・未公証です。Gatekeeperにより起動が制限される場合があります。
+通常の配布用に仕上げるには、Mac上でDeveloper ID署名・Appleの公証と実機確認が必要です。
+Macを利用する開発者向けにsign-macos.shとentitlements.plistを同梱しています。
+Developer ID証明書とXcode Command Line ToolsがあるMacで、例：
+  ./sign-macos.sh "Developer ID Application: Your Name (TEAMID)"
+その後、Appleのnotarytoolによる公証・staplerによるチケット付与を行って配布します。
+組織の保護機能を無効化する手順は含めていません。
+
+【Linux】
+glibc系のデスクトップLinux、X11／XWaylandと合成処理がある環境を想定します。
+Ubuntu 22.04/24.04などを検証候補としています。Alpine/musl、ネイティブWaylandのみの環境は対象外です。
+Intel/AMDはlinux-x64、ARM64はlinux-arm64を選びます。
+tar.gzを展開し、フォルダー内で ./launch.sh を実行します。
+.NETは同梱していますが、X11・fontconfig・glibc・OpenSSL・ICU等のOSライブラリは必要です。
+不足する共有ライブラリが表示された場合は、利用ディストリビューションの公式パッケージを確認してください。
+典型的なAvalonia依存：libX11、libICE、libSM、libfontconfig。日本語フォントも必要です。
+ウィンドウマネージャーによって最前面・主画面全体の被覆が制限される場合があります。
+同梱のAppIcon.pngをデスクトップ環境のランチャーアイコンとして利用できます。
+
+【ファイル】
+実行ファイルの隣にあるDLLや共有ライブラリも必要です。フォルダー全体を移してください。
+THIRD-PARTYフォルダーに依存パッケージのライセンス告知と出典情報を同梱しています。
+SHA256SUMS.txtでファイルのハッシュを確認できます。

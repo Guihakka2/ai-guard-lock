@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="src/AiGuardLock.Core/AiGuardLock.Core.csproj" />
+  <Project Path="src/AiGuardLock.CrossPlatform/AiGuardLock.CrossPlatform.csproj" />
+  <Project Path="tests/AiGuardLock.CrossPlatform.Tests/AiGuardLock.CrossPlatform.Tests.csproj" />
+</Solution>

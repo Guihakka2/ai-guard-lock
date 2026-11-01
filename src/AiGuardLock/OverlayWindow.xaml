@@ -1,0 +1,40 @@
+<Window x:Class="AiGuardLock.OverlayWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="AI Guard Lock — オーバーレイ" WindowStyle="None" ResizeMode="NoResize"
+        AllowsTransparency="True" Background="#700A1422" Topmost="True" ShowInTaskbar="True"
+        WindowStartupLocation="Manual" PreviewKeyDown="Window_PreviewKeyDown">
+    <Grid Margin="24">
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+                      HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="520">
+            <Border Background="#FC122538" CornerRadius="18" Padding="32" BorderBrush="#537388" BorderThickness="1">
+                <StackPanel>
+                    <TextBlock Text="AI GUARD LOCK" FontSize="12" FontWeight="Bold" Foreground="#81DBD2" />
+                    <StackPanel Orientation="Horizontal" Margin="0,22,0,10">
+                        <Ellipse Width="9" Height="9" Fill="#81DBD2" Margin="0,0,9,0" />
+                        <TextBlock Text="画面カバー中" FontSize="15" FontWeight="SemiBold" Foreground="#C4EDE7" />
+                    </StackPanel>
+                    <TextBlock Text="本人確認して作業に戻る" FontSize="26" FontWeight="SemiBold" Foreground="White" />
+                    <TextBlock x:Name="UnlockInstructions" Text="背後の画面はそのまま表示しています。解除するには、開始時に設定したPIN・パスワードを入力してください。" Foreground="#B5C6D6" Margin="0,12,0,24" />
+                    <StackPanel x:Name="HelloUnlockPanel" Visibility="Collapsed">
+                        <Button x:Name="HelloUnlockButton" Content="Windows Helloで解除" Background="#81DBD2" Foreground="#10283A" Click="HelloUnlock_Click" />
+                        <TextBlock Text="指紋・顔・Windows PINなど、Windowsが提示する方法で本人確認します。" Foreground="#B5C6D6" FontSize="12" Margin="0,10,0,8" />
+                    </StackPanel>
+                    <StackPanel x:Name="LocalUnlockPanel">
+                    <Label Content="PIN・パスワードで解除" Target="{Binding ElementName=UnlockPassword}" Foreground="#D9E5EF" Padding="0,0,0,8" />
+                    <PasswordBox x:Name="UnlockPassword" AutomationProperties.Name="解除PINまたはパスワード" />
+                    <Button x:Name="UnlockButton" Content="解除" Background="#81DBD2" Foreground="#10283A" Click="Unlock_Click" IsDefault="True" />
+                    </StackPanel>
+                    <TextBlock x:Name="FeedbackText" Text="設定したPIN・パスワードを入力してください。" Foreground="#FFD997" MinHeight="45" Margin="0,10,0,6" AutomationProperties.LiveSetting="Polite" />
+                    <TextBlock x:Name="CountdownText" Foreground="#C4D4E0" TextAlignment="Center" Margin="0,20,0,18" />
+                    <Border BorderBrush="#415C70" BorderThickness="0,1,0,0" Padding="0,18,0,0">
+                        <StackPanel>
+                            <TextBlock Text="半透明スクリーンカバー" Foreground="White" FontWeight="SemiBold" />
+                            <TextBlock Text="Windowsのロック機能ではありません。復旧が必要な場合は Ctrl+Alt+Del からタスクマネージャーを開けます。" Foreground="#B5C6D6" FontSize="12" Margin="0,8,0,0" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Border>
+        </ScrollViewer>
+    </Grid>
+</Window>

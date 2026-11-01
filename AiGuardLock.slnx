@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AiGuardLock.Core/AiGuardLock.Core.csproj" />
+    <Project Path="src/AiGuardLock/AiGuardLock.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AiGuardLock.Tests/AiGuardLock.Tests.csproj" />
+  </Folder>
+</Solution>
