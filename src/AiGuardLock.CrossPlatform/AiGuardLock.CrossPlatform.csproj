@@ -7,7 +7,7 @@
     <ApplicationIcon>../AiGuardLock/Assets/AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Desktop" Version="12.1.4" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
     <ProjectReference Include="../AiGuardLock.Core/AiGuardLock.Core.csproj" />
     <AvaloniaResource Include="../AiGuardLock/Assets/AppIcon.png" Link="Assets/AppIcon.png" />
