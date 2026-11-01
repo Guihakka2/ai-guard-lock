@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Avalonia.Desktop" Version="11.3.22" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.22" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.4" />
     <ProjectReference Include="../AiGuardLock.Core/AiGuardLock.Core.csproj" />
     <AvaloniaResource Include="../AiGuardLock/Assets/AppIcon.png" Link="Assets/AppIcon.png" />
     <InternalsVisibleTo Include="AiGuardLock.CrossPlatform.Tests" />
