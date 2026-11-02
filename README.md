@@ -13,11 +13,11 @@
 
 配布ファイルはこのリポジトリの **Releases** に配置します。非公開リポジトリのため閲覧にはアクセス権が必要です。
 
-公開準備の進捗と未確認事項は[公開前チェックリスト](docs/PUBLICATION-CHECKLIST-JA.md)に記録しています。1.0.1は公開前確認用の下書きです。旧1.0.0にはビルドPCの個人パスが含まれるため、公開用の配布物として使用しないでください。
+公開準備の進捗と未確認事項は[公開前チェックリスト](docs/PUBLICATION-CHECKLIST-JA.md)に記録しています。[1.0.2の非公開下書き](https://github.com/Guihakka2/ai-guard-lock/releases/tag/untagged-f07d4bfe0a6cb251a8de)に6配布物とハッシュを保管しています。旧1.0.0にはビルドPCの個人パスが含まれるため、公開用の配布物として使用しないでください。
 
 ## 別のPCへ持っていく
 
-`dist/AI-Guard-Lock-1.0.1-win-x64.zip` をコピーして、移動先で「すべて展開」→ `AiGuardLock.exe` を起動します。Intel/AMDのWindows 11 PC向けです。Snapdragon等のARM PCには `dist/AI-Guard-Lock-1.0.1-win-arm64.zip` を使用してください。
+`dist/AI-Guard-Lock-1.0.2-win-x64.zip` をコピーして、移動先で「すべて展開」→ `AiGuardLock.exe` を起動します。Intel/AMDのWindows 11 PC向けです。Snapdragon等のARM PCには `dist/AI-Guard-Lock-1.0.2-win-arm64.zip` を使用してください。
 
 .NET同梱の単一EXEなので、移動先へSDK・.NETを別途インストールする必要はありません。元のPCの.lnkだけをコピーする方法では動きません。移動先のデスクトップアイコンは、同梱の `Create-Desktop-Shortcut.cmd` またはEXEの右クリックメニューから作成できます。
 
@@ -84,4 +84,4 @@ dotnet run --project tests/AiGuardLock.CrossPlatform.Tests -c Release
 dotnet run --project src/AiGuardLock.CrossPlatform -c Release
 ```
 
-Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。開発用ソースはAvalonia 12.1.4に移行し、自動20チェックとWindows上のネイティブウィンドウ4チェックを通過しています。配布済み1.0.1は更新前の版です。Mac・Linux上での動作を保証するものではありません。
+Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。1.0.2のソースはAvalonia 12.1.4に移行し、自動20チェックとWindows上のネイティブウィンドウ4チェックを通過しています。macOS・Ubuntu上でもビルドとヘッドレス20チェックが成功しています。実際の透過表示・画面操作は未検証です。

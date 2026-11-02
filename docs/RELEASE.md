@@ -38,3 +38,9 @@ linux-x64、linux-arm64、osx-arm64、osx-x64を自己完結型で発行。Windo
 ## 1.0.1 公開前修正版
 
 Core DLLに残っていた開発PCのPDBパスを除去。Releaseのデバッグ情報無効化・ソースパス置換・OS/CPUごとの独立ビルド出力を使用。ライセンス収集も隔離された実際の復元結果を参照します。6配布物のユーザー名・機微ファイル検査0件、SHA-256一致、Windows60チェック・共通19チェック成功。詳細はSECURITY-REVIEW-JA.mdを参照。
+
+## 1.0.2 配布準備（2026-11-02）
+
+Avalonia 12.1.4へ移行済みのソース `bae7895ebd81e4f71a29ccdbce16838c04de1dc8` から、Windows・Linux・macOSの各x64/ARM64、計6アーカイブを再作成。.NET 10.0.14を同梱し、旧1.0.1は変更していません。
+
+Windows60チェック、共通20チェック成功。6アーカイブのSHA-256一致、個人パス・機微ファイル混入0件、Defender脅威検出0件を確認しました。OS別のビルド・自動検証は[Windows・Ubuntu・macOSの実行記録](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41375991374)を参照。利用者の希望によりmacOS/Linuxは自動テストで検証し、実機GUI操作は未検証のプレビューとして扱います。未署名・Mac未公証という制限は継続します。
