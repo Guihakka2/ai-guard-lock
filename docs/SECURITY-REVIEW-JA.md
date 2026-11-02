@@ -27,11 +27,11 @@
 
 ## GitHubのアクセス確認
 
-前回の本人確認後、共同編集者0人、Deploy keysなし、Webhooksなし、self-hosted runnerなしを確認しました。Actionsの既定トークンはcontents/packagesの読み取りのみ、PR作成・承認とfork PRワークフロー実行は無効でした。リポジトリ・EnvironmentのActions Secrets、および確認したDependabot・Codespaces・AgentsのSecretsはありませんでした。第三者Actionsの利用範囲は既定の全許可です。
+本人確認後の設定を作業再開中にも再取得し、共同編集者0人、Deploy keysなし、Webhooksなし、self-hosted runnerなしを確認しました。Actionsの既定トークンはcontents/packagesの読み取りのみ、PR作成・承認とfork PRワークフロー実行は無効でした。リポジトリ・EnvironmentのActions Secrets、および確認したDependabot・Codespaces・AgentsのSecretsはありませんでした。第三者Actionsの利用範囲は既定の全許可で、commit SHAへの固定要求は無効です。
 
 アカウントに接続されているCodex Connector、Claude、Graphify LabsのGitHub Appsは、全リポジトリを対象とする書き込み権限を持っていました。これはアプリ本体のネットワーク機能とは別の権限です。他のプロジェクトでも使っている可能性があるため、対象を限定する変更は未実施です。追加権限の要求も承認していません。
 
-再確認時にはGitHubの本人確認セッションが期限切れになっていました。上記は前回確認時点の状態であり、現在の保護された設定を再取得したものではありません。実行直前に利用者本人の認証を経て確認します。
+作業再開時はGitHubの本人確認画面でしたが、その後アクセス設定が表示可能になり、上記の保護された設定と3アプリの全リポジトリ対象を再確認しました。全リポジトリ対象を必要な範囲へ絞るかは利用者の判断待ちです。
 
 ## 依存更新の確認
 
@@ -42,7 +42,7 @@ DependabotのPR #1〜#3はAvalonia 11.3.22から12.1.4への更新です。main�
 ## 公開前に残る確認
 
 - Private Releaseに残る旧1.0.0の配布物を、そのまま公開しないこと。
-- GitHub Appsの対象リポジトリの絞り込みと、本人再確認後のアクセス設定の最終確認。
+- GitHub Appsの対象リポジトリを全対象のまま維持するか、必要な範囲へ絞るかの判断。
 - macOS/Linux/ARM64の実機確認、配布署名、アカウントの2段階認証・組織ポリシー等は今回の自動チェックだけでは保証できません。
 
 ## PCへの侵入について
