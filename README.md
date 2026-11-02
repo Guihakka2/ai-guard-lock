@@ -13,6 +13,8 @@
 
 配布ファイルはこのリポジトリの **Releases** に配置します。非公開リポジトリのため閲覧にはアクセス権が必要です。
 
+公開準備の進捗と未確認事項は[公開前チェックリスト](docs/PUBLICATION-CHECKLIST-JA.md)に記録しています。1.0.1は公開前確認用の下書きです。旧1.0.0にはビルドPCの個人パスが含まれるため、公開用の配布物として使用しないでください。
+
 ## 別のPCへ持っていく
 
 `dist/AI-Guard-Lock-1.0.1-win-x64.zip` をコピーして、移動先で「すべて展開」→ `AiGuardLock.exe` を起動します。Intel/AMDのWindows 11 PC向けです。Snapdragon等のARM PCには `dist/AI-Guard-Lock-1.0.1-win-arm64.zip` を使用してください。
