@@ -37,7 +37,7 @@ AI Guard Lockは、サインイン済みのデスクトップを半透明のカ�
 
 デスクトップアイコンは同梱の`Create-Desktop-Shortcut.cmd`で作れます。.NET同梱のため、別PCへSDKを入れる必要はありません。Mac・Linuxの手順は[こちら](docs/CROSS-PLATFORM-JA.txt)。
 
-**[1.1.0をダウンロード](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview)** — 6種類の配布物とSHA-256を公開しています。MITの`LICENSE.txt`も併せて取得してください。全配布物は未署名、Macは未公証です。実行制限があるPCでは管理者の方針に従ってください。
+**[1.1.0をダウンロード](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview)** — 6種類の配布物とSHA-256を公開しています。MITの`LICENSE.txt`は各配布物に同梱しています。全配布物は未署名、Macは未公証です。実行制限があるPCでは管理者の方針に従ってください。
 
 ## 対応OS
 
@@ -48,7 +48,7 @@ AI Guard Lockは、サインイン済みのデスクトップを半透明のカ�
 | macOS Apple Silicon / Intel | アプリ専用PIN・パスワード | プレビュー、実機未検証・未署名・未公証 |
 | Linux x64 / ARM64 | アプリ専用PIN・パスワード | プレビュー、実機未検証 |
 
-Windows・Ubuntu・macOSでビルドと共通20チェックが成功しています。[最新の自動テスト結果](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41396656815)。手元のWindowsでは、さらにWPF60チェックと共通アプリの実ウィンドウ4チェックが成功しました。これは各PCの透過合成・物理入力・本人認証の保証ではありません。
+Windows・Ubuntu・macOSでビルド、共通40チェックと言語切り替え15チェックが成功しています。[最新の自動テスト結果](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41396656815)。手元のWindowsでは、さらにWPF60チェックと共通アプリの実ウィンドウ4チェックが成功しました。これは各PCの透過合成・物理入力・本人認証の保証ではありません。
 
 ## 質問・要望・不具合
 
@@ -133,4 +133,4 @@ dotnet run --project tests/AiGuardLock.CrossPlatform.Tests -c Release
 dotnet run --project src/AiGuardLock.CrossPlatform -c Release
 ```
 
-Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。1.1.0のソースはAvalonia 12.1.4に移行し、自動20チェックとWindows上のネイティブウィンドウ4チェックを通過しています。macOS・Ubuntu上でもビルドとヘッドレス20チェックが成功しています。実際の透過表示・画面操作は未検証です。
+Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。1.1.0のソースはAvalonia 12.1.4に移行し、自動40チェック、言語切り替え15チェックとWindows上のネイティブウィンドウ日英各8チェックを通過しています。macOS・Ubuntu上でもビルドと共通40チェック・言語切り替え15チェックが成功しています。実際の透過表示・画面操作は未検証です。
