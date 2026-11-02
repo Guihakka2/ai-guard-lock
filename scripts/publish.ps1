@@ -30,6 +30,7 @@ try {
         --artifacts-path ".artifacts/publish-build/$Version/$Runtime" --packages $packageRoot -o $destination
     if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }
     Copy-Item -LiteralPath 'docs/PORTABLE-JA.txt' -Destination (Join-Path $destination 'README-JA.txt')
+    Copy-Item -LiteralPath 'LICENSE' -Destination (Join-Path $destination 'LICENSE.txt')
     Copy-Item -LiteralPath 'scripts/portable-shortcut.ps1' -Destination (Join-Path $destination 'Create-Desktop-Shortcut.ps1')
     Copy-Item -LiteralPath 'scripts/portable-shortcut.cmd' -Destination (Join-Path $destination 'Create-Desktop-Shortcut.cmd')
     $licenseRoot = Join-Path $destination 'LICENSES'

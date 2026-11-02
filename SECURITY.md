@@ -8,7 +8,7 @@ The minimum four-digit PIN and one-second retry delay provide limited resistance
 
 ## Supported builds
 
-Security fixes are provided through a new release of the latest version. Update the whole distribution: self-contained builds include their own .NET runtime, so a system .NET update alone does not update the bundled runtime. macOS/Linux previews are not yet validated on their target operating systems. Current binaries are unsigned; macOS bundles are not notarized.
+Security fixes are provided through a new release of the latest version. Update the whole distribution: self-contained builds include their own .NET runtime, so a system .NET update alone does not update the bundled runtime. macOS/Linux builds and headless tests have passed on GitHub-hosted runners; their actual transparency, focus, physical input, and packaged GUI behavior remain unverified. Current binaries are unsigned; macOS bundles are not notarized.
 
 ## Reporting
 

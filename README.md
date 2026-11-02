@@ -1,8 +1,41 @@
 # AI Guard Lock
 
-作業画面を半透明で覆い、本人確認で解除するデスクトップアプリです。OSのロック画面へは切り替えません。
+**離席中もAIの処理を続けながら、作業画面を半透明で覆う。**
 
-![AI Guard Lock](src/AiGuardLock/Assets/AppIcon-preview.png)
+[![ダウンロード・配布状況](docs/media/download.svg)](https://github.com/Guihakka2/ai-guard-lock/releases)
+[使い方](#すぐ使う) · [質問・要望](https://github.com/Guihakka2/ai-guard-lock/discussions) · [不具合報告](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)
+
+AI Guard Lockは、サインイン済みのデスクトップを半透明のカバーで覆い、戻ったときにWindows Helloまたはアプリ専用PINで解除するアプリです。バックグラウンドのコード生成・コマンド・API処理を想定しています。
+
+> **OSのロックや強固なアクセス保護の代わりにはなりません。** 背景は見えたままで、タスク切替・他のモニター・プロセス終了は防ぎません。秘密情報を保護したい離席時はOSのロックを使用してください。同じ画面をクリック・入力するAIとも併用できません。
+
+## 画面と操作デモ
+
+![半透明カバーと解除の操作デモ](docs/media/demo.gif)
+
+約8秒のGIFです。実際のWindows版のカバーを、テスト専用PINで表示・解除しています。背景の進捗はデモ用表示で、実AIの処理やWindows Hello認証を録画したものではありません。
+
+<details>
+<summary>設定画面を見る</summary>
+
+<img src="docs/media/setup.png" alt="Windows Helloまたはアプリ専用PINを選ぶ設定画面" width="430">
+
+設定画面は自動テストで描画したものです。Helloの利用可否は各PCで確認してください。
+
+</details>
+
+## すぐ使う
+
+1. [Releases](https://github.com/Guihakka2/ai-guard-lock/releases)で、自分のOS・CPUに合うファイルを選びます。
+2. WindowsはZIPを「すべて展開」し、`AiGuardLock.exe`を開きます。
+3. Windows Helloの本人確認を試すか、アプリ専用PIN・パスワードを設定します。
+4. 注意事項を確認して「半透明カバーを開始」。戻ったら本人確認で解除します。
+
+デスクトップアイコンは同梱の`Create-Desktop-Shortcut.cmd`で作れます。.NET同梱のため、別PCへSDKを入れる必要はありません。Mac・Linuxの手順は[こちら](docs/CROSS-PLATFORM-JA.txt)。
+
+**配布状況：** ソースは公開済みです。1.0.2の配布ファイルは現在公開準備中で、Release公開後に上のボタンからダウンロードできます。全配布物は未署名、Macは未公証です。実行制限があるPCでは管理者の方針に従ってください。
+
+## 対応OS
 
 | 版 | 解除方法 | 検証状況 |
 | --- | --- | --- |
@@ -11,9 +44,21 @@
 | macOS Apple Silicon / Intel | アプリ専用PIN・パスワード | プレビュー、実機未検証・未署名・未公証 |
 | Linux x64 / ARM64 | アプリ専用PIN・パスワード | プレビュー、実機未検証 |
 
-配布ファイルはこのリポジトリの **Releases** に配置します。非公開リポジトリのため閲覧にはアクセス権が必要です。
+Windows・Ubuntu・macOSでビルドと共通20チェックが成功しています。[最新の自動テスト結果](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41396656815)。手元のWindowsでは、さらにWPF60チェックと共通アプリの実ウィンドウ4チェックが成功しました。これは各PCの透過合成・物理入力・本人認証の保証ではありません。
 
-公開準備の進捗と未確認事項は[公開前チェックリスト](docs/PUBLICATION-CHECKLIST-JA.md)に記録しています。[1.0.2の非公開下書き](https://github.com/Guihakka2/ai-guard-lock/releases/tag/untagged-f07d4bfe0a6cb251a8de)に6配布物とハッシュを保管しています。旧1.0.0にはビルドPCの個人パスが含まれるため、公開用の配布物として使用しないでください。
+## 質問・要望・不具合
+
+| 内容 | 送る場所 |
+| --- | --- |
+| 使い方の質問、感想、機能の要望 | [Discussions](https://github.com/Guihakka2/ai-guard-lock/discussions) |
+| 起動できない、表示がおかしい、解除に失敗する | [Issuesの不具合報告](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md) |
+| セキュリティ上の問題 | [Security policy](SECURITY.md)の報告方法 |
+
+不具合報告にはOS・CPU・アプリの版・再現手順を添えてください。PIN・パスワード・トークン・仕事の画面や個人情報は投稿しないでください。返信時間の保証はありません。
+
+改善に参加する方は[貢献ガイド](CONTRIBUTING.md)・[行動規範](CODE_OF_CONDUCT.md)、支援技術に関する制限は[アクセシビリティ案内](ACCESSIBILITY.md)をご覧ください。コードは[MIT License](LICENSE)です。外部依存のライセンスは別途同梱しています。
+
+以下は詳しい操作手順と開発者向け情報です。
 
 ## 別のPCへ持っていく
 
@@ -31,7 +76,7 @@ Windows Helloは移動先のPC・ユーザーのPINや生体認証を使いま�
 
 アイコンは `scripts/create-icon.ps1` から再生成できます。配布ZIPの再生成は `scripts/publish.ps1 -Runtime win-x64` または `-Runtime win-arm64`。既存配布物を誤って上書きしないよう、同じバージョンの出力がある場合は停止します。
 
-## 使い方
+## 詳しい使い方
 
 1. 配布ZIPを展開し、`AiGuardLock.exe` を開きます。
 2. 「WindowsのPIN・指紋で本人確認を試す」を押し、表示されたWindowsの画面で認証します。事前チェックが利用不可でも試せます。成功すると「Windows Helloで解除」が選択されます。アプリ専用PINを使う場合はそちらを選び、数字PIN（半角4〜12桁）またはパスワード（8〜128文字）を2回入力します。

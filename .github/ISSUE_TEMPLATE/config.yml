@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 質問・感想・機能の要望
+    url: https://github.com/Guihakka2/ai-guard-lock/discussions
+    about: 使い方や改善案はこちらへ。PINや個人情報は投稿しないでください。
+  - name: セキュリティ上の問題
+    url: https://github.com/Guihakka2/ai-guard-lock/security/policy
+    about: 問題の詳細を公開Issueへ書く前に、報告方法を確認してください。
