@@ -25,11 +25,4 @@
 
 未検証OSはプレビューと明記する。署名や組織の配布条件を満たさない環境について、動作確認済み・安全保証と表示しない。
 
-## 公開とは別のツール作業
-
-- Graphify・NeuralMindはCodex/Claude Codeに登録・検索確認済み。会話全体のトークン削減率は未測定。
-- Manus・Antigravityは未連携。接続方法と対象アプリを確認する必要がある。
-- Headroomは未導入。詳細な安全確認と既存経路への接続検証が必要。
-- RTK 1.1.0は依存の既知報告があるため導入保留。確認資料は公開リポジトリ外に保存。
-
 技術的な確認範囲は[SECURITY-REVIEW-JA.md](SECURITY-REVIEW-JA.md)、実機検証項目は[TESTING.md](TESTING.md)を参照してください。
