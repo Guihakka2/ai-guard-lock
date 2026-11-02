@@ -15,7 +15,8 @@ public sealed class PasswordCredential : IDisposable
     public PasswordCredential(ReadOnlySpan<char> password)
     {
         if (!IsValidInput(password))
-            throw new ArgumentException("数字だけのPINは4〜12桁、パスワードは空白だけを避けて8〜128文字で設定してください。", nameof(password));
+            throw new ArgumentException(UiText.Get("数字だけのPINは4〜12桁、パスワードは空白だけを避けて8〜128文字で設定してください。",
+                "Use a PIN of 4–12 digits, or a password of 8–128 characters that is not only whitespace."), nameof(password));
 
         _hash = Rfc2898DeriveBytes.Pbkdf2(password, _salt, Iterations, HashAlgorithmName.SHA256, 32);
     }

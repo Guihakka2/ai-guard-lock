@@ -1,31 +1,31 @@
 ---
-name: 不具合を報告する
-about: 起動・表示・解除などの問題を報告します
-title: "[不具合] "
+name: Bug report / 不具合報告
+about: Report startup, display, or verification problems / 起動・表示・解除の問題
+title: "[Bug] "
 ---
 
 <!-- PIN・パスワード・APIキー・個人情報・仕事の画面は載せないでください。セキュリティ上の問題はSECURITY.mdの報告方法を確認してください。 -->
 
-### 環境
+### Environment / 環境
 
-- OSとバージョン:
-- CPU（x64 / ARM64）:
-- AI Guard Lockのバージョン:
-- 入手したファイル名:
-- モニター数・表示倍率（表示の問題の場合）:
+- OS and version / OSとバージョン:
+- CPU (x64 / ARM64):
+- AI Guard Lock version / アプリのバージョン:
+- Downloaded file name / 入手したファイル名:
+- Displays and scale / モニター数・表示倍率:
 
-### 再現手順
+### Steps to reproduce / 再現手順
 
 1.
 2.
 3.
 
-### 期待した動き
+### Expected behavior / 期待した動き
 
-### 実際の動き・表示されたエラー
+### Actual behavior or error / 実際の動き・エラー
 
 <!-- エラー文を貼る前にユーザー名・ファイルパス・秘密情報を除いてください。 -->
 
-### 補足
+### Additional context / 補足
 
 <!-- 写真・動画は問題の部分だけにし、通知や他のアプリの情報を写さないでください。 -->

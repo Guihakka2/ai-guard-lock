@@ -1,7 +1,7 @@
 param(
     [ValidateSet('win-x64', 'win-arm64')]
     [string]$Runtime = 'win-x64',
-    [string]$Version = '1.0.2'
+    [string]$Version = '1.1.0'
 )
 $ErrorActionPreference = 'Stop'
 if ($Version -notmatch '^\d+\.\d+\.\d+$') { throw 'Version must have the form 1.0.0.' }
@@ -30,6 +30,7 @@ try {
         --artifacts-path ".artifacts/publish-build/$Version/$Runtime" --packages $packageRoot -o $destination
     if ($LASTEXITCODE -ne 0) { throw 'Publish failed.' }
     Copy-Item -LiteralPath 'docs/PORTABLE-JA.txt' -Destination (Join-Path $destination 'README-JA.txt')
+    Copy-Item -LiteralPath 'docs/PORTABLE-EN.txt' -Destination (Join-Path $destination 'README-EN.txt')
     Copy-Item -LiteralPath 'LICENSE' -Destination (Join-Path $destination 'LICENSE.txt')
     Copy-Item -LiteralPath 'scripts/portable-shortcut.ps1' -Destination (Join-Path $destination 'Create-Desktop-Shortcut.ps1')
     Copy-Item -LiteralPath 'scripts/portable-shortcut.cmd' -Destination (Join-Path $destination 'Create-Desktop-Shortcut.cmd')
