@@ -1,0 +1,45 @@
+AI Guard Lock — macOS / Linux preview guide
+
+This preview covers the primary display with a translucent window and uses a
+temporary app PIN/password. Touch ID, PAM and OS-login authentication are not
+supported. This is not an OS lock or a security boundary. The background remains
+visible; task switching, other monitors and process termination can bypass it.
+
+MACOS
+Use osx-arm64 for Apple Silicon or osx-x64 for Intel. Extract the ZIP and open
+AI Guard Lock.app. The bundle is unsigned and unnotarized. System or organization
+policies may prevent execution; do not disable protections to use it.
+Signing helper files are supplied for developers with a suitable Apple Developer
+ID certificate. Signing, notarization and physical testing are separate work.
+
+LINUX
+Use linux-x64 for Intel/AMD or linux-arm64 for ARM64. Extract the tar.gz and run:
+  ./launch.sh
+X11/XWayland with compositing is expected on a glibc desktop system. Native
+Wayland-only and Alpine/musl are not targeted. OS libraries such as X11, fontconfig,
+glibc, OpenSSL and ICU are still required despite bundling .NET. Window-manager
+rules can restrict transparency or topmost placement.
+
+LANGUAGE (1.1.0+)
+Japanese display-language systems use Japanese; other systems use English.
+Linux: ./launch.sh --language=en  (or --language=ja)
+macOS: open "AI Guard Lock.app" --args --language=en
+
+USE AND RECOVERY
+Set a 4–12 ASCII-digit PIN, or an 8–128 character password that is not only
+whitespace. Acknowledge the limits, start the cover, and return with the same PIN.
+The credential lasts for the session and is not saved to disk. Managed input
+strings cannot be guaranteed to disappear from memory. Do not reuse important
+passwords. For a first preview trial, use the optional 2-minute automatic dismissal.
+If needed, end the app through macOS Force Quit or the Linux system monitor.
+
+LIMITS
+Physical GUI behavior remains unverified. Automated hosted builds and headless
+tests do not prove transparency, focus, physical input or access security. Sleep,
+automatic OS locking and power policies are not changed. Same-desktop GUI agents
+are not supported. Compatibility with every background AI tool is unverified.
+
+LICENSE.txt is the project MIT license; THIRD-PARTY contains dependency notices.
+Questions: https://github.com/Guihakka2/ai-guard-lock/discussions
+Bugs: https://github.com/Guihakka2/ai-guard-lock/issues
+Security: https://github.com/Guihakka2/ai-guard-lock/security/policy

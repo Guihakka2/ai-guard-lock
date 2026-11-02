@@ -1,0 +1,41 @@
+AI Guard Lock — Windows portable guide
+
+Cover the primary display with a translucent window while background work continues.
+This is not an OS lock or an access-control boundary. The background stays visible.
+Task switching, other displays and process termination can bypass it. Use the OS
+lock to protect access or sensitive information. GUI agents on the same desktop
+are not supported. Sleep, automatic locking and power policies are not changed.
+
+START
+Choose win-x64 for Intel/AMD Windows 11 or win-arm64 for ARM64 Windows 11.
+Extract the complete ZIP and run AiGuardLock.exe. .NET is bundled.
+Create-Desktop-Shortcut.cmd creates a desktop icon. All binaries are unsigned;
+follow your organization's execution policy.
+
+LANGUAGE (1.1.0+)
+Japanese display-language systems use Japanese; other systems use English.
+Explicitly choose from a terminal in the extracted folder:
+  .\AiGuardLock.exe --language=en
+  .\AiGuardLock.exe --language=ja
+Windows Hello dialogs follow Windows' own language and available sign-in methods.
+
+USE
+Test Windows Hello or choose an app PIN/password. Use 4–12 ASCII digits for a PIN,
+or 8–128 characters for a password, avoiding whitespace-only input. Read and
+acknowledge the limits, then start the cover. Return with Hello or the same app PIN.
+The app PIN is separate from your Windows PIN and lasts only for this session.
+Do not reuse an important password. Credentials are not saved to disk. Windows
+Hello returns a verification result, not your PIN or biometric data.
+
+RECOVERY
+Ctrl+Alt+Del → Task Manager → end AI Guard Lock. Do not end unrelated processes.
+A display-configuration change dismisses the cover. Optional automatic dismissal
+is available in setup; the default is no automatic dismissal.
+
+INTEGRITY AND FEEDBACK
+Compare the archive's SHA-256 with its sidecar. LICENSE.txt is the project MIT
+license; runtime licenses and third-party notices are included separately.
+Questions: https://github.com/Guihakka2/ai-guard-lock/discussions
+Bugs: https://github.com/Guihakka2/ai-guard-lock/issues
+Security: https://github.com/Guihakka2/ai-guard-lock/security/policy
+Do not post credentials, personal paths, or work screenshots.

@@ -32,7 +32,7 @@ public partial class MainWindow : Window
         if (_helloBusy || _closing || _overlay is not null) return;
         SetHelloBusy(true);
         _helloAvailable = false;
-        HelloStatus.Text = "Windows Helloを確認しています…";
+        HelloStatus.Text = UiText.Get("Windows Helloを確認しています…", "Checking Windows Hello…");
         try
         {
             var availability = await _hello.CheckAvailabilityAsync();
@@ -43,7 +43,7 @@ public partial class MainWindow : Window
         catch (Exception)
         {
             if (_closing) return;
-            HelloStatus.Text = "Windows Helloの確認に失敗しました。再確認するか、アプリ専用PIN・パスワードを利用してください。";
+            HelloStatus.Text = UiText.Get("Windows Helloの確認に失敗しました。再確認するか、アプリ専用PIN・パスワードを利用してください。", "Could not check Windows Hello. Check again or use an app-only PIN or password.");
         }
         finally
         {
@@ -60,7 +60,7 @@ public partial class MainWindow : Window
     {
         if (_helloBusy || _closing || _overlay is not null) return;
         SetHelloBusy(true);
-        HelloStatus.Text = "Windowsの本人確認画面で、普段のWindows PINなどを使って認証してください。カバーはまだ開始しません。";
+        HelloStatus.Text = UiText.Get("Windowsの本人確認画面で、普段のWindows PINなどを使って認証してください。カバーはまだ開始しません。", "Use your usual Windows PIN or another method in the Windows verification dialog. The cover has not started.");
         try
         {
             // The availability result is advisory for this explicit, user-initiated probe.
@@ -72,14 +72,14 @@ public partial class MainWindow : Window
                 _helloAvailable = true;
                 HelloMode.IsEnabled = true;
                 HelloMode.IsChecked = true;
-                HelloStatus.Text = "Windowsで本人確認できました。Windows Helloで解除する設定を選択しました。";
-                StatusText.Text = "確認チェックを入れて「半透明カバーを開始」を押すと使えます。";
+                HelloStatus.Text = UiText.Get("Windowsで本人確認できました。Windows Helloで解除する設定を選択しました。", "Windows verified your identity. Windows Hello is now selected for unlocking.");
+                StatusText.Text = UiText.Get("確認チェックを入れて「半透明カバーを開始」を押すと使えます。", "Check the acknowledgment box and select Start screen cover.");
             }
             else HelloStatus.Text = WindowsHelloMessages.Probe(result);
         }
         catch (Exception error)
         {
-            if (!_closing) HelloStatus.Text = $"Windowsの本人確認を開始できませんでした（エラー 0x{error.HResult:X8}）。カバーは開始していません。";
+            if (!_closing) HelloStatus.Text = UiText.Get($"Windowsの本人確認を開始できませんでした（エラー 0x{error.HResult:X8}）。カバーは開始していません。", $"Could not start Windows verification (error 0x{error.HResult:X8}). The cover has not started.");
         }
         finally
         {
@@ -100,7 +100,7 @@ public partial class MainWindow : Window
         if (_overlay is not null || _helloBusy) return;
         if (Acknowledge.IsChecked != true)
         {
-            StatusText.Text = "注意事項を確認して、チェックを入れてください。";
+            StatusText.Text = UiText.Get("注意事項を確認して、チェックを入れてください。", "Read the notices and check the acknowledgment box.");
             return;
         }
 
@@ -108,7 +108,7 @@ public partial class MainWindow : Window
         var useHello = HelloMode.IsChecked == true;
         if (useHello && !_helloAvailable)
         {
-            StatusText.Text = "Windows Helloの利用可否を再確認してください。";
+            StatusText.Text = UiText.Get("Windows Helloの利用可否を再確認してください。", "Check Windows Hello availability again.");
             return;
         }
         if (!useHello)
@@ -119,7 +119,7 @@ public partial class MainWindow : Window
             using var confirmation = new PasswordBuffer(secureConfirmation);
             if (!password.Characters.SequenceEqual(confirmation.Characters))
             {
-                StatusText.Text = "確認用パスワードが一致していません。";
+                StatusText.Text = UiText.Get("確認用パスワードが一致していません。", "The confirmation password does not match.");
                 ConfirmPassword.Clear();
                 ConfirmPassword.Focus();
                 return;
@@ -128,7 +128,7 @@ public partial class MainWindow : Window
             try { credential = new PasswordCredential(password.Characters); }
             catch (ArgumentException)
             {
-                StatusText.Text = "数字だけのPINは4〜12桁、パスワードは空白だけを避けて8〜128文字で設定してください。";
+                StatusText.Text = UiText.Get("数字だけのPINは4〜12桁、パスワードは空白だけを避けて8〜128文字で設定してください。", "Use a 4–12 digit PIN or an 8–128 character password that is not all whitespace.");
                 return;
             }
         }
@@ -148,7 +148,7 @@ public partial class MainWindow : Window
             _overlay = null;
             credential?.Dispose();
             Show();
-            StatusText.Text = "オーバーレイを開始できませんでした。安全のため解除しました。";
+            StatusText.Text = UiText.Get("オーバーレイを開始できませんでした。安全のため解除しました。", "Could not start the cover. It was released for safety.");
         }
         finally
         {
@@ -171,11 +171,11 @@ public partial class MainWindow : Window
         Activate();
         StatusText.Text = result switch
         {
-            OverlayResult.Unlocked => "PIN・パスワードで解除しました。再度開始するには新しく設定してください。",
-            OverlayResult.HelloUnlocked => "Windows Helloで本人確認できたため、カバーを解除しました。",
-            OverlayResult.TimedOut => "制限時間になったため、自動解除しました。",
-            OverlayResult.DisplayChanged => "画面構成が変わったため、安全のため解除しました。",
-            _ => "オーバーレイを閉じました（パスワードによる解除ではありません）。"
+            OverlayResult.Unlocked => UiText.Get("PIN・パスワードで解除しました。再度開始するには新しく設定してください。", "Unlocked with your PIN or password. Set a new one to start again."),
+            OverlayResult.HelloUnlocked => UiText.Get("Windows Helloで本人確認できたため、カバーを解除しました。", "Windows Hello verified your identity and released the cover."),
+            OverlayResult.TimedOut => UiText.Get("制限時間になったため、自動解除しました。", "The time limit was reached. The cover was released automatically."),
+            OverlayResult.DisplayChanged => UiText.Get("画面構成が変わったため、安全のため解除しました。", "The display configuration changed. The cover was released for safety."),
+            _ => UiText.Get("オーバーレイを閉じました（パスワードによる解除ではありません）。", "The cover was closed without password verification.")
         };
         if (HelloMode.IsChecked == true) StartButton.Focus();
         else NewPassword.Focus();

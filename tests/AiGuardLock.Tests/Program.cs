@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Windows.Automation;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -44,7 +46,7 @@ internal static class Program
             try
             {
                 if (_preview) await PreviewWindows();
-                else { await TestWindows(); await TestWindowsHello(); }
+                else { CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("ja"); await TestWindows(); await TestWindowsHello(); await TestEnglish(); }
             }
             catch (Exception e) { Console.Error.WriteLine(e); exitCode = 1; }
             finally
@@ -229,6 +231,70 @@ internal static class Program
         hello.Pending.SetResult(UserConsentVerificationResult.Verified);
         await Task.Delay(50);
         Check(overlay.Result == OverlayResult.DisplayChanged && !overlay.IsVisible, "late Hello completion cannot change a finished session");
+    }
+
+    private static async Task TestEnglish()
+    {
+        var previous = CultureInfo.CurrentUICulture;
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
+        try
+        {
+            var setup = LocalSetup();
+            setup.Show();
+            await Task.Delay(50);
+            Check(setup.Title == "AI Guard Lock — Setup", "English setup title");
+            Check((string)Control<Button>(setup, "StartButton").Content == "Start screen cover", "English start button");
+            Check(AutomationProperties.GetName(Control<PasswordBox>(setup, "NewPassword")) == "PIN or password", "English accessible PIN name");
+            Render(setup, "setup-en");
+            Click(setup, "StartButton");
+            Check(Control<TextBlock>(setup, "StatusText").Text == "Read the notices and check the acknowledgment box.", "English acknowledgment validation");
+            Control<CheckBox>(setup, "Acknowledge").IsChecked = true;
+            FillSetup(setup);
+            Click(setup, "StartButton");
+            var cover = CurrentOverlay();
+            await Task.Delay(50);
+            Check(cover.Title == "AI Guard Lock — Screen cover", "English cover title");
+            Check(Control<TextBlock>(cover, "CountdownText").Text == "No automatic release  /  Primary screen only", "English countdown");
+            Render(cover, "overlay-en");
+            Control<PasswordBox>(cover, "UnlockPassword").Password = "wrong";
+            Click(cover, "UnlockButton");
+            Check(Control<TextBlock>(cover, "FeedbackText").Text == "Incorrect PIN or password. Try again in one second.", "English retry feedback");
+            cover.Finish(OverlayResult.DisplayChanged);
+            Check(Control<TextBlock>(setup, "StatusText").Text == "The display configuration changed. The cover was released for safety.", "English recovery status");
+            setup.Close();
+            var hello = new FakeWindowsHello();
+            setup = new MainWindow(hello);
+            setup.Show();
+            await Task.Delay(50);
+            Render(setup, "setup-hello-en");
+            foreach (var result in Enum.GetValues<UserConsentVerifierAvailability>())
+                Check(!WindowsHelloMessages.Availability(result).Any(c => c >= '\u3000' && c <= '\u9fff'), $"English Hello availability {result}");
+            foreach (var result in Enum.GetValues<UserConsentVerificationResult>())
+            {
+                hello.Result = result;
+                Click(setup, "TestHelloButton");
+                await Task.Delay(20);
+                Check(!Control<TextBlock>(setup, "HelloStatus").Text.Any(c => c >= '\u3000' && c <= '\u9fff'), $"English Hello probe {result}");
+            }
+            Control<CheckBox>(setup, "Acknowledge").IsChecked = true;
+            Click(setup, "StartButton");
+            cover = CurrentOverlay();
+            await Task.Delay(50);
+            Render(cover, "overlay-hello-en");
+            foreach (var result in Enum.GetValues<UserConsentVerificationResult>().Where(r => r != UserConsentVerificationResult.Verified))
+            {
+                hello.Result = result;
+                Click(cover, "HelloUnlockButton");
+                await Task.Delay(20);
+                Check(cover.IsVisible && !Control<TextBlock>(cover, "FeedbackText").Text.Any(c => c >= '\u3000' && c <= '\u9fff'), $"English Hello rejection {result}");
+            }
+            hello.Result = UserConsentVerificationResult.Verified;
+            Click(cover, "HelloUnlockButton");
+            await Task.Delay(20);
+            Check(cover.Result == OverlayResult.HelloUnlocked, "English verified Hello unlock");
+            setup.Close();
+        }
+        finally { CultureInfo.CurrentUICulture = previous; }
     }
 
     private static T Control<T>(Window window, string name) where T : FrameworkElement => (T)window.FindName(name);

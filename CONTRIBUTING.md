@@ -1,5 +1,13 @@
 # 改善への参加方法
 
+## English quick start
+
+Questions and ideas: [Discussions](https://github.com/Guihakka2/ai-guard-lock/discussions). Reproducible bugs: [bug report](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md). Read [SECURITY.md](SECURITY.md) before reporting a security issue. Do not post credentials, personal paths, or work screenshots.
+
+Use .NET10 SDK, run the executable test runners listed in the English [README](README.md), and describe your changes, checked systems, and untested limits in a PR. WPF tests require Windows. Tests with real windows can briefly cover the screen. Discuss larger changes first, keep changes focused, and preserve the project's MIT license plus third-party notices. The app must not be presented as an OS lock or an access-control boundary. Response times and merging are not guaranteed.
+
+Please be respectful: no harassment, discrimination, threats, spam, or disclosure of others' private information. GitHub's reporting tools are available for abuse. The Japanese contribution guide follows below.
+
 使ってみた感想、質問、改善案は[Discussions](https://github.com/Guihakka2/ai-guard-lock/discussions)へ。不具合は[報告フォーム](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)から、OS・CPU・版番号・再現手順を添えてください。脆弱性の詳細は公開Issueへ書かず、[SECURITY.md](SECURITY.md)の方法で連絡してください。
 
 ## コードを変更する場合

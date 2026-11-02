@@ -1,7 +1,7 @@
 param(
     [ValidateSet('linux-x64', 'linux-arm64', 'osx-x64', 'osx-arm64', 'all')]
     [string]$Runtime = 'all',
-    [string]$Version = '1.0.2'
+    [string]$Version = '1.1.0'
 )
 $ErrorActionPreference = 'Stop'
 if ($Version -notmatch '^\d+\.\d+\.\d+$') { throw 'Version must have the form 1.0.0.' }

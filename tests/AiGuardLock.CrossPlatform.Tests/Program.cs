@@ -1,3 +1,7 @@
+using System.Globalization;
+using Avalonia.Automation;
+using Avalonia.Controls;
+using Avalonia.VisualTree;
 using AiGuardLock.Core;
 using AiGuardLock.CrossPlatform;
 using Avalonia;
@@ -26,8 +30,10 @@ internal static class Program
     [STAThread]
     public static int Main(string[] args)
     {
+        var originalCulture = CultureInfo.CurrentUICulture;
         try
         {
+            UiText.Configure(args);
             if (args.Contains("--native-smoke")) return NativeSmoke();
             var time = new Clock();
             using var credential = new PasswordCredential("0482");
@@ -62,6 +68,9 @@ internal static class Program
             }
 
             AppBuilder.Configure<App>().UseHeadless(new AvaloniaHeadlessPlatformOptions()).SetupWithoutStarting();
+            LocalizedUi("en");
+            LocalizedUi("ja");
+            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("ja");
             var setup = new SetupWindow();
             setup.Show();
             Check(setup.Icon is not null && setup.Cover is null, "setup icon loads and no cover starts automatically");
@@ -90,6 +99,40 @@ internal static class Program
             return 0;
         }
         catch (Exception error) { Console.Error.WriteLine(error); return 1; }
+        finally { CultureInfo.CurrentUICulture = originalCulture; }
+    }
+
+    private static void LocalizedUi(string language)
+    {
+        var original = CultureInfo.CurrentUICulture;
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(language);
+        var english = language == "en";
+        var setup = new SetupWindow();
+        try
+        {
+            Check((string?)setup.Start.Content == (english ? "Start translucent cover" : "半透明カバーを開始"), language + " setup action");
+            Check(AutomationProperties.GetName(setup.Pin) == (english ? "PIN or password" : "PIN・パスワード"), language + " accessible PIN");
+            Check(setup.Duration.Items.Cast<string>().First() == (english ? "Never (unlock with PIN)" : "しない（PINで解除）"), language + " duration choices");
+            setup.StartCover();
+            Check(setup.Status.Text == (english ? "Read the limitations and check the acknowledgment box." : "注意事項を確認してチェックを入れてください。"), language + " acknowledgment error");
+            setup.Acknowledge.IsChecked = true;
+            setup.Pin.Text = "0482"; setup.Confirmation.Text = "9999";
+            setup.StartCover();
+            Check(setup.Status.Text == (english ? "The confirmation does not match." : "確認用の入力が一致していません。"), language + " mismatch error");
+            setup.Pin.Text = "1"; setup.Confirmation.Text = "1";
+            setup.StartCover();
+            Check(setup.Status.Text == (english ? "Use a 4–12 digit PIN or an 8–128 character password that is not only whitespace." : "数字PINは4〜12桁、パスワードは空白だけを避けて8〜128文字です。"), language + " invalid credential error");
+            using var session = new CoverSession(new PasswordCredential("0482"), null);
+            var cover = new CoverWindow(session);
+            Check(cover.Title == (english ? "AI Guard Lock — Translucent cover" : "AI Guard Lock — 半透明カバー"), language + " cover title");
+            Check((string?)cover.Unlock.Content == (english ? "Unlock" : "解除"), language + " unlock action");
+            cover.Close();
+            Check(cover.Feedback.Text == (english ? "Enter your PIN to unlock." : "解除するにはPINを入力してください。"), language + " blocked close feedback");
+            cover.Pin.Text = "9999"; cover.Submit();
+            Check(cover.Feedback.Text == (english ? "Incorrect PIN or password, or retry is paused. Wait one second and try again." : "PIN・パスワードが違うか、再試行の待機中です。1秒待ってから入力してください。"), language + " wrong credential feedback");
+            cover.Finish(CoverResult.Closed);
+        }
+        finally { setup.Close(); CultureInfo.CurrentUICulture = original; }
     }
 
     private static void Pump(int milliseconds)
@@ -104,15 +147,20 @@ internal static class Program
         var setup = new SetupWindow();
         try
         {
+            var english = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName != "ja";
             setup.Show(); Pump(300);
+            Check((string?)setup.Start.Content == (english ? "Start translucent cover" : "半透明カバーを開始"), "native localized setup");
             Directory.CreateDirectory(".artifacts/render");
             using (var image = new RenderTargetBitmap(new PixelSize((int)setup.ClientSize.Width, (int)setup.ClientSize.Height)))
             {
                 image.Render(setup); image.Save(".artifacts/render/cross-setup.png", new PngBitmapEncoderOptions());
             }
             setup.Pin.Text = "0482"; setup.Confirmation.Text = "0482"; setup.Acknowledge.IsChecked = true;
+            setup.Duration.SelectedIndex = 1;
             setup.StartCover(); Pump(400);
             var cover = setup.Cover ?? throw new InvalidOperationException("Native transparency was not accepted: " + setup.Status.Text);
+            Check(cover.GetVisualDescendants().OfType<TextBlock>().Any(text => text.Text?.StartsWith(english ? "Automatic unlock in " : "自動解除まで ", StringComparison.Ordinal) == true), "native localized countdown");
+            Check(AutomationProperties.GetName(cover.Pin) == (english ? "PIN or password" : "PIN・パスワード"), "native accessible cover input");
             Check(cover.IsVisible && !setup.IsVisible && cover.Topmost, "native transparent cover opens and hides setup");
             using (var image = new RenderTargetBitmap(new PixelSize((int)cover.ClientSize.Width, (int)cover.ClientSize.Height)))
             {
@@ -125,6 +173,7 @@ internal static class Program
             Pump(1200);
             cover.Pin.Text = "0482"; cover.Submit(); Pump(100);
             Check(!cover.IsVisible && setup.IsVisible, "native correct PIN restores setup");
+            Check(setup.Status.Text == (english ? "Unlocked with your PIN. Set a new PIN before starting again." : "PINで解除しました。再開時には新しいPINを設定してください。"), "native localized unlock status");
             Console.WriteLine($"{_passed} native checks passed.");
             return 0;
         }

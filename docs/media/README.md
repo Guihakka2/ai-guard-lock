@@ -1,5 +1,8 @@
 # 紹介用メディア
 
+- `demo-en.gif`: 英語UIの実WPFカバーとテストPINによる操作例。日本語版と同じく背景は合成進捗で、実AI・実Helloの認証ではありません。24フレーム、各33/100秒、無限ループです。
+- `setup-en.png` / `cover-en.png` / `demo-before-en.png`: 英語設定画面と同じ操作例の静止画。
+
 - `setup.png`: WPFの自動テストで描画したWindows版の設定画面。Helloサービスはテスト用のため、実機での生体認証成功を示す画像ではありません。
 - `demo.gif`: 実際のWindows版OverlayWindowを表示し、テスト専用PINで解除した約8秒・24フレームのGIF。背景はデモ用のWPF進捗表示です。実AIの処理、実デスクトップの画面録画、Windows Helloの実認証ではありません。WPFのビジュアルから生成し、仕事の画面や通知は収録していません。
 - `cover.png` / `demo-before.png`: 同じデモの途中と開始時の静止画。

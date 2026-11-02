@@ -29,7 +29,7 @@ public partial class OverlayWindow : Window
 
     internal OverlayWindow(PasswordCredential? credential, TimeSpan? duration, IWindowsHelloService? hello)
     {
-        if (credential is null && hello is null) throw new ArgumentException("解除方法が必要です。");
+        if (credential is null && hello is null) throw new ArgumentException(UiText.Get("解除方法が必要です。", "An unlock method is required."));
         if (duration is { } limit && (limit <= TimeSpan.Zero || limit > TimeSpan.FromHours(1)))
             throw new ArgumentOutOfRangeException(nameof(duration));
         _credential = credential;
@@ -40,8 +40,8 @@ public partial class OverlayWindow : Window
         HelloUnlockPanel.Visibility = hello is null ? Visibility.Collapsed : Visibility.Visible;
         if (credential is null)
         {
-            UnlockInstructions.Text = "背後の画面はそのままです。Windows Helloの本人確認で、このカバーだけを解除します。";
-            FeedbackText.Text = "「Windows Helloで解除」を押して本人確認してください。";
+            UnlockInstructions.Text = UiText.Get("背後の画面はそのままです。Windows Helloの本人確認で、このカバーだけを解除します。", "Your screen remains visible behind this cover. Windows Hello verification releases this cover only.");
+            FeedbackText.Text = UiText.Get("「Windows Helloで解除」を押して本人確認してください。", "Select Unlock with Windows Hello to verify your identity.");
             HelloUnlockButton.IsDefault = true;
             UnlockButton.IsDefault = false;
         }
@@ -78,11 +78,11 @@ public partial class OverlayWindow : Window
     {
         if (_duration is null)
         {
-            CountdownText.Text = "自動解除なし  /  主画面のみ";
+            CountdownText.Text = UiText.Get("自動解除なし  /  主画面のみ", "No automatic release  /  Primary screen only");
             return;
         }
         var seconds = Math.Max(0, (int)Math.Ceiling((_duration.Value - _elapsed.Elapsed).TotalSeconds));
-        CountdownText.Text = $"自動解除まで {seconds / 60:00}:{seconds % 60:00}  /  プライマリ画面のみ";
+        CountdownText.Text = UiText.Get($"自動解除まで {seconds / 60:00}:{seconds % 60:00}  /  プライマリ画面のみ", $"Automatic release in {seconds / 60:00}:{seconds % 60:00}  /  Primary screen only");
     }
 
     private void Unlock_Click(object sender, RoutedEventArgs e)
@@ -94,7 +94,7 @@ public partial class OverlayWindow : Window
         var valid = _credential.Verify(password.Characters);
         UnlockPassword.Clear();
         if (valid) { Finish(OverlayResult.Unlocked); return; }
-        FeedbackText.Text = "PIN・パスワードが違います。1秒後に再試行できます。";
+        FeedbackText.Text = UiText.Get("PIN・パスワードが違います。1秒後に再試行できます。", "Incorrect PIN or password. Try again in one second.");
         _retryAfter = _elapsed.Elapsed + TimeSpan.FromSeconds(1);
         UnlockButton.IsEnabled = false;
         UnlockPassword.Focus();
@@ -105,7 +105,7 @@ public partial class OverlayWindow : Window
         if (_closed || _hello is null || _verificationInProgress) return;
         _verificationInProgress = true;
         HelloUnlockButton.IsEnabled = false;
-        FeedbackText.Text = "Windowsの本人確認ダイアログで操作してください。";
+        FeedbackText.Text = UiText.Get("Windowsの本人確認ダイアログで操作してください。", "Continue in the Windows verification dialog.");
         try
         {
             var result = await _hello.VerifyAsync(new WindowInteropHelper(this).Handle);
@@ -115,7 +115,7 @@ public partial class OverlayWindow : Window
         }
         catch (Exception)
         {
-            if (!_closed) FeedbackText.Text = "Windows Helloを開けませんでした。カバーは解除していません。再試行してください。";
+            if (!_closed) FeedbackText.Text = UiText.Get("Windows Helloを開けませんでした。カバーは解除していません。再試行してください。", "Could not open Windows Hello. The cover remains active. Try again.");
         }
         finally
         {
@@ -147,7 +147,7 @@ public partial class OverlayWindow : Window
         if (!_allowClose)
         {
             e.Cancel = true;
-            FeedbackText.Text = "解除するには本人確認してください。";
+            FeedbackText.Text = UiText.Get("解除するには本人確認してください。", "Verify your identity to unlock.");
             FocusUnlockControl();
         }
         base.OnClosing(e);
@@ -174,7 +174,7 @@ public partial class OverlayWindow : Window
     {
         if (e.Key != Key.Escape) return;
         e.Handled = true;
-        FeedbackText.Text = "解除するには本人確認してください。";
+        FeedbackText.Text = UiText.Get("解除するには本人確認してください。", "Verify your identity to unlock.");
         FocusUnlockControl();
     }
 }

@@ -1,4 +1,5 @@
 using Avalonia;
+using AiGuardLock.Core;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Themes.Fluent;
@@ -8,7 +9,11 @@ namespace AiGuardLock.CrossPlatform;
 internal static class Program
 {
     [STAThread]
-    public static int Main(string[] args) => BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    public static int Main(string[] args)
+    {
+        UiText.Configure(args);
+        return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    }
     public static AppBuilder BuildAvaloniaApp() => AppBuilder.Configure<App>().UsePlatformDetect();
 }
 
