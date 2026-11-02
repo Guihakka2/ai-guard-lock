@@ -84,4 +84,4 @@ dotnet run --project tests/AiGuardLock.CrossPlatform.Tests -c Release
 dotnet run --project src/AiGuardLock.CrossPlatform -c Release
 ```
 
-Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。共通コードの19チェックとWindows上のネイティブウィンドウ4チェックを通過していますが、Mac・Linux上での動作を保証するものではありません。
+Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。開発用ソースはAvalonia 12.1.4に移行し、自動20チェックとWindows上のネイティブウィンドウ4チェックを通過しています。配布済み1.0.1は更新前の版です。Mac・Linux上での動作を保証するものではありません。

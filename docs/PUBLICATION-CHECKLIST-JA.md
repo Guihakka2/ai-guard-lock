@@ -7,7 +7,7 @@
 - [x] 1.0.1の6アーカイブを作成し、GitHubの非公開下書きに12添付ファイルとして保管。
 - [x] 1.0.1のハッシュ一致、個人パス・機微ファイルの混入0件を再確認。
 - [x] Windows・共通アプリのNuGet直接・間接依存の監査で既知報告0件を再確認。
-- [x] Avalonia 12.1.4への更新を一時コピーで検証。API変更によるビルド失敗を確認し、未マージ。
+- [x] Avalonia 12.1.4への更新エラーを再現し、関連3依存・ウィンドウ装飾API・画像保存APIを一括移行。ビルド成功、自動20チェック・Windows実ウィンドウ4チェック成功、依存監査0件。
 - [x] GitHubの共同編集者・Deploy keys・Webhooks・Runner・Secrets・Actions既定権限を再確認。GitHub Appsの対象範囲も再確認。
 - [x] 利用者の指示によりCodex・Claude・GraphifyのGitHub AppsをAI Guard Lockの1リポジトリだけに限定して保存後に確認。
 - [x] 手元のWindows PCのデスクトップショートカットをハッシュ確認済みの1.0.1に切り替え、設定画面の起動とWindows Hello利用可能表示を確認。旧版の重複した設定画面は終了。

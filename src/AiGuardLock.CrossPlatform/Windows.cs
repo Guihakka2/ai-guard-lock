@@ -150,7 +150,7 @@ internal sealed class CoverWindow : Window
         _session = session;
         Title = "AI Guard Lock — 半透明カバー";
         Icon = Ui.Icon();
-        SystemDecorations = SystemDecorations.None;
+        WindowDecorations = Avalonia.Controls.WindowDecorations.None;
         CanResize = false; Topmost = true; ShowInTaskbar = true;
         TransparencyLevelHint = new[] { WindowTransparencyLevel.Transparent };
         Background = Brush.Parse("#700A1422");
