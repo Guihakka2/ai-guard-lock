@@ -109,6 +109,7 @@ def main() -> None:
         launcher = '#!/bin/sh\nset -eu\nbase=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)\nexec "$base/app/AiGuardLock.Portable" "$@"\n'
         (destination / 'launch.sh').write_text(launcher, encoding='utf-8', newline='\n')
     shutil.copy2(ROOT / 'docs/CROSS-PLATFORM-JA.txt', destination / 'README-JA.txt')
+    shutil.copy2(ROOT / 'LICENSE', destination / 'LICENSE.txt')
     notices(destination, args.runtime, args.assets)
     sums = []
     for path in sorted(destination.rglob('*')):

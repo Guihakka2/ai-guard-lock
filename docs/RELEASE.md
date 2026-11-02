@@ -1,5 +1,7 @@
 # AI Guard Lock 1.0.0 配布検証
 
+この冒頭部分は旧1.0.0の検証時点の記録です。旧GitHub Releaseは削除済みです。現在の配布状況は[Releases一覧](https://github.com/Guihakka2/ai-guard-lock/releases)、1.0.2の検査結果はこの文書の末尾を参照してください。過去の「現在の配布版」等の記述は当時の状態です。
+
 ## 配布物
 
 - `dist/AI-Guard-Lock-1.0.0-win-x64.zip`：Intel/AMD、Windows 11。
