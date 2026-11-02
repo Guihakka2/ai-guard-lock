@@ -48,7 +48,7 @@ AI Guard Lockは、サインイン済みのデスクトップを半透明のカ�
 | macOS Apple Silicon / Intel | アプリ専用PIN・パスワード | プレビュー、実機未検証・未署名・未公証 |
 | Linux x64 / ARM64 | アプリ専用PIN・パスワード | プレビュー、実機未検証 |
 
-Windows・Ubuntu・macOSでビルド、共通40チェックと言語切り替え15チェックが成功しています。[最新の自動テスト結果](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41396656815)。手元のWindowsでは、さらにWPF60チェックと共通アプリの実ウィンドウ4チェックが成功しました。これは各PCの透過合成・物理入力・本人認証の保証ではありません。
+Windows・Ubuntu・macOSでビルド、共通40チェックと言語切り替え15チェックが成功しています。[最新の自動テスト結果](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41427580198)。手元のWindowsでは、さらにWPF87チェックと共通アプリの実ウィンドウ日英各8チェックが成功しました。これは各PCの透過合成・物理入力・本人認証の保証ではありません。
 
 ## 質問・要望・不具合
 
@@ -119,7 +119,7 @@ ExecutionPolicyの指定は起動したPowerShellプロセスだけに適用し�
 
 実行ファイルは `src/AiGuardLock/bin/Release/net10.0-windows10.0.22000.0/AiGuardLock.exe`。同じディレクトリのDLL・設定ファイルも必要です。ショートカットを再作成するには、ビルド後に `scripts/create-shortcut.ps1` を実行します。
 
-専用テストランナーで60チェック成功。`dotnet test`は使用しません。詳細は [検証記録](docs/TESTING.md)、設計上の制限は [技術メモ](docs/TECHNICAL-NOTES.md) を参照してください。
+専用テストランナーで87チェック成功。`dotnet test`は使用しません。詳細は [検証記録](docs/TESTING.md)、設計上の制限は [技術メモ](docs/TECHNICAL-NOTES.md) を参照してください。
 
 SDK・ビルド出力・ショートカットは管理対象外です。
 
