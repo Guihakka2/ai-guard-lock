@@ -76,6 +76,7 @@ internal static class Program
             Check(setup.Pin.Text == string.Empty, "setup clears PIN on close");
             using var viewSession = new CoverSession(new PasswordCredential("0482"), null, time);
             var view = new CoverWindow(viewSession);
+            Check(view.WindowDecorations == Avalonia.Controls.WindowDecorations.None, "cover has no operating-system window decorations");
             view.Close();
             Check(view.Result == CoverResult.Active, "ordinary close request cannot finish cover");
             view.Pin.Text = "9999";
@@ -107,7 +108,7 @@ internal static class Program
             Directory.CreateDirectory(".artifacts/render");
             using (var image = new RenderTargetBitmap(new PixelSize((int)setup.ClientSize.Width, (int)setup.ClientSize.Height)))
             {
-                image.Render(setup); image.Save(".artifacts/render/cross-setup.png");
+                image.Render(setup); image.Save(".artifacts/render/cross-setup.png", new PngBitmapEncoderOptions());
             }
             setup.Pin.Text = "0482"; setup.Confirmation.Text = "0482"; setup.Acknowledge.IsChecked = true;
             setup.StartCover(); Pump(400);
@@ -115,7 +116,7 @@ internal static class Program
             Check(cover.IsVisible && !setup.IsVisible && cover.Topmost, "native transparent cover opens and hides setup");
             using (var image = new RenderTargetBitmap(new PixelSize((int)cover.ClientSize.Width, (int)cover.ClientSize.Height)))
             {
-                image.Render(cover); image.Save(".artifacts/render/cross-cover.png");
+                image.Render(cover); image.Save(".artifacts/render/cross-cover.png", new PngBitmapEncoderOptions());
             }
             cover.Close();
             Check(cover.IsVisible, "native close request is refused");

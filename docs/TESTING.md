@@ -55,3 +55,7 @@ Hello PIN未設定の環境ではDeviceNotPresent、利用者によるPIN設定�
 ## macOS・Linux用の共通アプリ
 
 Avalonia 11.3.22 / .NET 10。ヘッドレス19チェック、Windows上の実ウィンドウ4チェック成功。PIN正否、再試行待機、タイマー、通常終了の拒否、解除後の設定画面復帰を確認。設定・カバーの描画も確認しました。macOS・Linuxの実機での起動・透過・最前面表示・フォーカス・解除は未検証です。
+
+## Avalonia 12.1.4への開発用ソース移行
+
+2026-11-02。Desktop・Themes.Fluent・Headlessを12.1.4に揃えた状態で旧APIのビルドエラーを再現。WindowDecorationsとPNG保存の新APIへ移行後、Releaseビルドは警告0・エラー0、自動20チェック成功。追加したチェックはカバーのウィンドウ枠がNoneであることを確認します。Windows上の実ウィンドウ4チェックも成功しました。配布済み1.0.1は変更していません。Mac・Linux・ARM64実機での確認は引き続き未実施です。
