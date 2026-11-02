@@ -59,3 +59,17 @@ Avalonia 11.3.22 / .NET 10。ヘッドレス19チェック、Windows上の実ウ
 ## Avalonia 12.1.4への開発用ソース移行
 
 2026-11-02。Desktop・Themes.Fluent・Headlessを12.1.4に揃えた状態で旧APIのビルドエラーを再現。WindowDecorationsとPNG保存の新APIへ移行後、Releaseビルドは警告0・エラー0、自動20チェック成功。追加したチェックはカバーのウィンドウ枠がNoneであることを確認します。Windows上の実ウィンドウ4チェックも成功しました。配布済み1.0.1は変更していません。Mac・Linux・ARM64実機での確認は引き続き未実施です。
+
+## GitHub-hosted OS別チェック
+
+2026-11-02、mainのd0129a5058d10404dde3515a53fd6da5e9d9965dをGitHub-hosted runnerで実行しました。[実行記録](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41375991374)。
+
+| 環境 | ビルド | ヘッドレスチェック |
+| --- | --- | --- |
+| Windows 2025 | 成功 | 20件成功 |
+| Ubuntu 24.04 | 成功 | 20件成功 |
+| macOS 15 ARM64 | 成功 | 20件成功 |
+
+macOSのrunner imageはmacos-15-arm64でした。いずれも開発用ソースの確認で、1.0.1の配布アーカイブを起動した検証ではありません。実際の透過合成・フォーカス・物理入力・本人認証・署名・公証は確認していません。これらの実機GUI確認は引き続き必要です。
+
+ワークフローは手動起動のみ、GitHub-hosted runner限定、contents:read、公式Actionsのcommit SHA固定、各ジョブ10分上限です。仕事用PCをself-hosted runnerとして登録する処理はありません。

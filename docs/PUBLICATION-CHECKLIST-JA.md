@@ -11,6 +11,8 @@
 - [x] GitHubの共同編集者・Deploy keys・Webhooks・Runner・Secrets・Actions既定権限を再確認。GitHub Appsの対象範囲も再確認。
 - [x] 利用者の指示によりCodex・Claude・GraphifyのGitHub AppsをAI Guard Lockの1リポジトリだけに限定して保存後に確認。
 - [x] 手元のWindows PCのデスクトップショートカットをハッシュ確認済みの1.0.1に切り替え、設定画面の起動とWindows Hello利用可能表示を確認。旧版の重複した設定画面は終了。
+- [x] 公開準備PR #4とAvalonia移行PR #5を取り込み、個別更新PR #1〜#3を閉じた。
+- [x] 手動実行のOS別ワークフローを追加し、GitHub-hosted Windows・Ubuntu・macOS ARM64でビルドとヘッドレス20チェックの成功を確認。[実行記録](https://github.com/Guihakka2/ai-guard-lock/actions/runs/41375991374)。
 
 ## 公開前に必要な判断・操作
 
