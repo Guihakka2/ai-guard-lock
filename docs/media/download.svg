@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="280" height="48" viewBox="0 0 280 48" role="img" aria-label="ダウンロード・配布状況">
+<svg xmlns="http://www.w3.org/2000/svg" width="280" height="48" viewBox="0 0 280 48" role="img" aria-label="1.0.2をダウンロード">
 <rect width="280" height="48" rx="10" fill="#087f7c"/>
 <path d="M25 12v17m-6-6 6 6 6-6m-15 9v5h18v-5" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-<text x="48" y="30" font-family="sans-serif" font-size="17" font-weight="700" fill="white">ダウンロード・配布状況</text>
+<text x="48" y="30" font-family="sans-serif" font-size="17" font-weight="700" fill="white">ダウンロード（1.0.2）</text>
 </svg>

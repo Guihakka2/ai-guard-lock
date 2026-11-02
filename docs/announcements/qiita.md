@@ -12,7 +12,7 @@ AIのコード生成やコマンドを背景で進めながら、主画面を半
 
 ## 動作デモ
 
-![実際のカバーをテストPINで表示・解除](https://raw.githubusercontent.com/Guihakka2/ai-guard-lock/main/docs/media/demo.gif)
+![実際のカバーをテストPINで表示・解除](https://raw.githubusercontent.com/Guihakka2/ai-guard-lock/f31285aaf6d56549df41a618f4d83c59f35d8953/docs/media/demo.gif)
 
 実際のWPFカバーを表示し、テスト用PINを入力して解除した約8秒のGIFです。背景はデモ用の進捗表示です。実AIとの接続、仕事の画面の録画、Windows Helloの実認証ではありません。
 
@@ -90,6 +90,6 @@ Windows版のランナーはWindows上で実行します。実ウィンドウの
 
 ## 配布とフィードバック
 
-Windows x64/ARM64とmacOS/Linux用プレビューを用意しています。全配布物は未署名、Macは未公証です。配布状況は[Releases](https://github.com/Guihakka2/ai-guard-lock/releases)で確認してください。1.0.2は記事作成時点では公開準備中です。
+Windows x64/ARM64とmacOS/Linux用プレビューを用意しています。全配布物は未署名、Macは未公証です。[1.0.2のRelease](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.0.2-preview)から計6種類をダウンロードできます。各ハッシュとMITの`LICENSE.txt`も添付しています。
 
 ソースはMIT Licenseです。改善案は[Discussions](https://github.com/Guihakka2/ai-guard-lock/discussions)、不具合は[Issues](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)へお願いします。PINや仕事の画面などを公開投稿しないでください。
