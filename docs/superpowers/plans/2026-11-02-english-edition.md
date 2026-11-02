@@ -16,8 +16,8 @@
 - [x] Windows UI: failing English setup/overlay/Hello assertions; localize static and dynamic strings, startup; Japanese and English runs.
 - [x] Cross-platform UI: failing English setup/cover/status assertions; localize startup and controls; Japanese/English headless + native smoke.
 - [x] English README, Japanese language link, English guides/launch text/demo; verify links and actual visuals.
-- [ ] Review, run OS-hosted checks, create self-contained bilingual distribution with project license included, check package hashes/personal paths/architecture/Defender.
-- [ ] Store draft and request action-time approval before publishing the new release; existing1.0.2 stays available.
+- [x] Review, run OS-hosted checks, create self-contained bilingual distribution with project license included, check package hashes/personal paths/architecture/Defender.
+- [x] Store draft and request action-time approval before publishing the new release; existing1.0.2 stays available.
 
 ## Verification
 

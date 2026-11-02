@@ -1,6 +1,6 @@
 # English launch copy
 
-Use the 1.1.0 download URL only after that release is published. These are drafts, not posts sent to an external account. The English demo is `docs/media/demo-en.gif` and must be visible from main before embedding it externally.
+1.1.0 is published: https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview . These are drafts, not posts sent to an external account. The English demo is `docs/media/demo-en.gif` and is available from main.
 
 ## Short introduction
 
