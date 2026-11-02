@@ -2,11 +2,11 @@
 
 [English](README.md) · 日本語
 
-1.1.0では画面も日英対応します。日本語環境では日本語、それ以外では英語を自動選択します。起動時に`--language=en`または`--language=ja`でも選べます。英語版の配布準備中は、従来の1.0.2をそのまま利用できます。
+1.1.0を公開しました。画面も日英対応です。日本語環境では日本語、それ以外では英語を自動選択します。起動時に`--language=en`または`--language=ja`でも選べます。
 
 **離席中もAIの処理を続けながら、作業画面を半透明で覆う。**
 
-[![1.0.2をダウンロード](docs/media/download.svg)](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.0.2-preview)
+[![1.1.0をダウンロード](docs/media/download.svg)](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview)
 [使い方](#すぐ使う) · [質問・要望](https://github.com/Guihakka2/ai-guard-lock/discussions) · [不具合報告](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)
 
 AI Guard Lockは、サインイン済みのデスクトップを半透明のカバーで覆い、戻ったときにWindows Helloまたはアプリ専用PINで解除するアプリです。バックグラウンドのコード生成・コマンド・API処理を想定しています。
@@ -37,7 +37,7 @@ AI Guard Lockは、サインイン済みのデスクトップを半透明のカ�
 
 デスクトップアイコンは同梱の`Create-Desktop-Shortcut.cmd`で作れます。.NET同梱のため、別PCへSDKを入れる必要はありません。Mac・Linuxの手順は[こちら](docs/CROSS-PLATFORM-JA.txt)。
 
-**[1.0.2をダウンロード](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.0.2-preview)** — 6種類の配布物とSHA-256を公開しています。MITの`LICENSE.txt`も併せて取得してください。全配布物は未署名、Macは未公証です。実行制限があるPCでは管理者の方針に従ってください。
+**[1.1.0をダウンロード](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview)** — 6種類の配布物とSHA-256を公開しています。MITの`LICENSE.txt`も併せて取得してください。全配布物は未署名、Macは未公証です。実行制限があるPCでは管理者の方針に従ってください。
 
 ## 対応OS
 
@@ -66,7 +66,7 @@ Windows・Ubuntu・macOSでビルドと共通20チェックが成功していま
 
 ## 別のPCへ持っていく
 
-`dist/AI-Guard-Lock-1.0.2-win-x64.zip` をコピーして、移動先で「すべて展開」→ `AiGuardLock.exe` を起動します。Intel/AMDのWindows 11 PC向けです。Snapdragon等のARM PCには `dist/AI-Guard-Lock-1.0.2-win-arm64.zip` を使用してください。
+`dist/AI-Guard-Lock-1.1.0-win-x64.zip` をコピーして、移動先で「すべて展開」→ `AiGuardLock.exe` を起動します。Intel/AMDのWindows 11 PC向けです。Snapdragon等のARM PCには `dist/AI-Guard-Lock-1.1.0-win-arm64.zip` を使用してください。
 
 .NET同梱の単一EXEなので、移動先へSDK・.NETを別途インストールする必要はありません。元のPCの.lnkだけをコピーする方法では動きません。移動先のデスクトップアイコンは、同梱の `Create-Desktop-Shortcut.cmd` またはEXEの右クリックメニューから作成できます。
 
@@ -133,4 +133,4 @@ dotnet run --project tests/AiGuardLock.CrossPlatform.Tests -c Release
 dotnet run --project src/AiGuardLock.CrossPlatform -c Release
 ```
 
-Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。1.0.2のソースはAvalonia 12.1.4に移行し、自動20チェックとWindows上のネイティブウィンドウ4チェックを通過しています。macOS・Ubuntu上でもビルドとヘッドレス20チェックが成功しています。実際の透過表示・画面操作は未検証です。
+Windowsで4種類の配布物を生成するには、.NET 10 SDKとPython 3を用意し、`scripts/publish-cross.ps1` を実行します。MacでのDeveloper ID署名・公証は別途必要です。1.1.0のソースはAvalonia 12.1.4に移行し、自動20チェックとWindows上のネイティブウィンドウ4チェックを通過しています。macOS・Ubuntu上でもビルドとヘッドレス20チェックが成功しています。実際の透過表示・画面操作は未検証です。

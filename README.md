@@ -4,7 +4,7 @@
 
 A translucent desktop cover for background coding, builds, and other long-running work. Return with Windows Hello or a temporary app PIN.
 
-[**Download / release status →**](https://github.com/Guihakka2/ai-guard-lock/releases) · [日本語](README.ja.md) · [Questions & ideas](https://github.com/Guihakka2/ai-guard-lock/discussions) · [Report a bug](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)
+[**Download 1.1.0 →**](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview) · [日本語](README.ja.md) · [Questions & ideas](https://github.com/Guihakka2/ai-guard-lock/discussions) · [Report a bug](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)
 
 ![English-language cover shown and dismissed with a test PIN](docs/media/demo-en.gif)
 
@@ -14,7 +14,7 @@ Eight seconds, looping. The demo uses the real Windows cover and a test PIN. Bac
 
 ## Try it
 
-English and Japanese UI ship in **1.1.0**, currently being prepared. The existing **1.0.2** release remains available with its original Japanese UI. Check [Releases](https://github.com/Guihakka2/ai-guard-lock/releases) for published downloads.
+**[1.1.0 is available](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview)** with English and Japanese UI. Choose your OS and CPU below.
 
 1. Download the archive matching your OS and CPU.
 2. On Windows, extract the complete ZIP and open `AiGuardLock.exe`.
