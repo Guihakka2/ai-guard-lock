@@ -16,7 +16,7 @@ https://github.com/Guihakka2/ai-guard-lock
 
 ## まず動きを見る
 
-![半透明カバーを表示してテストPINで解除するデモ](https://raw.githubusercontent.com/Guihakka2/ai-guard-lock/f31285aaf6d56549df41a618f4d83c59f35d8953/docs/media/demo.gif)
+![半透明カバーを表示してテストPINで解除するデモ](https://raw.githubusercontent.com/Guihakka2/ai-guard-lock/54554a6351eb58ff19bde7df29a33db48d583fdb/docs/media/demo.gif)
 
 約8秒のGIFです。実際のWindows版のカバーをテスト用PINで表示・解除しています。背景の進捗はデモ用で、実AIの処理やWindows Helloの実認証を録画したものではありません。仕事の画面や通知は収録していません。
 
