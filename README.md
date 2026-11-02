@@ -2,7 +2,7 @@
 
 **離席中もAIの処理を続けながら、作業画面を半透明で覆う。**
 
-[![ダウンロード・配布状況](docs/media/download.svg)](https://github.com/Guihakka2/ai-guard-lock/releases)
+[![1.0.2をダウンロード](docs/media/download.svg)](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.0.2-preview)
 [使い方](#すぐ使う) · [質問・要望](https://github.com/Guihakka2/ai-guard-lock/discussions) · [不具合報告](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)
 
 AI Guard Lockは、サインイン済みのデスクトップを半透明のカバーで覆い、戻ったときにWindows Helloまたはアプリ専用PINで解除するアプリです。バックグラウンドのコード生成・コマンド・API処理を想定しています。
@@ -33,7 +33,7 @@ AI Guard Lockは、サインイン済みのデスクトップを半透明のカ�
 
 デスクトップアイコンは同梱の`Create-Desktop-Shortcut.cmd`で作れます。.NET同梱のため、別PCへSDKを入れる必要はありません。Mac・Linuxの手順は[こちら](docs/CROSS-PLATFORM-JA.txt)。
 
-**配布状況：** ソースは公開済みです。1.0.2の配布ファイルは現在公開準備中で、Release公開後に上のボタンからダウンロードできます。全配布物は未署名、Macは未公証です。実行制限があるPCでは管理者の方針に従ってください。
+**[1.0.2をダウンロード](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.0.2-preview)** — 6種類の配布物とSHA-256を公開しています。MITの`LICENSE.txt`も併せて取得してください。全配布物は未署名、Macは未公証です。実行制限があるPCでは管理者の方針に従ってください。
 
 ## 対応OS
 
