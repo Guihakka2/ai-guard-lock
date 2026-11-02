@@ -12,7 +12,7 @@ AIのコード生成やコマンドを背景で進めながら、主画面を半
 
 ## 動作デモ
 
-![実際のカバーをテストPINで表示・解除](https://raw.githubusercontent.com/Guihakka2/ai-guard-lock/f31285aaf6d56549df41a618f4d83c59f35d8953/docs/media/demo.gif)
+![実際のカバーをテストPINで表示・解除](https://raw.githubusercontent.com/Guihakka2/ai-guard-lock/a99b4173c7d4ac46fcbfa0204338be5aeb09c6ab/docs/media/demo.gif)
 
 実際のWPFカバーを表示し、テスト用PINを入力して解除した約8秒のGIFです。背景はデモ用の進捗表示です。実AIとの接続、仕事の画面の録画、Windows Helloの実認証ではありません。
 
