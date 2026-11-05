@@ -23,11 +23,15 @@ public partial class OverlayWindow : Window
     private TimeSpan _retryAfter;
     private bool _closed;
     private bool _allowClose;
+    private readonly bool _allDisplays;
+    private readonly Func<IReadOnlyList<MonitorBounds>> _getMonitors;
+    private readonly List<SecondaryCoverWindow> _secondaryCovers = new();
     public OverlayResult Result { get; private set; } = OverlayResult.Closed;
 
     public OverlayWindow(PasswordCredential credential, TimeSpan? duration) : this(credential, duration, null) { }
 
-    internal OverlayWindow(PasswordCredential? credential, TimeSpan? duration, IWindowsHelloService? hello)
+    internal OverlayWindow(PasswordCredential? credential, TimeSpan? duration, IWindowsHelloService? hello,
+        bool allDisplays = false, Func<IReadOnlyList<MonitorBounds>>? getMonitors = null)
     {
         if (credential is null && hello is null) throw new ArgumentException(UiText.Get("解除方法が必要です。", "An unlock method is required."));
         if (duration is { } limit && (limit <= TimeSpan.Zero || limit > TimeSpan.FromHours(1)))
@@ -35,12 +39,16 @@ public partial class OverlayWindow : Window
         _credential = credential;
         _hello = hello;
         _duration = duration;
+        _allDisplays = allDisplays;
+        _getMonitors = getMonitors ?? DisplayMonitors.GetAll;
         InitializeComponent();
         LocalUnlockPanel.Visibility = credential is null ? Visibility.Collapsed : Visibility.Visible;
         HelloUnlockPanel.Visibility = hello is null ? Visibility.Collapsed : Visibility.Visible;
         if (credential is null)
         {
-            UnlockInstructions.Text = UiText.Get("背後の画面はそのままです。Windows Helloの本人確認で、このカバーだけを解除します。", "Your screen remains visible behind this cover. Windows Hello verification releases this cover only.");
+            UnlockInstructions.Text = _allDisplays
+                ? UiText.Get("背後の画面はそのままです。Windows Helloの本人確認で、すべてのカバーを解除します。", "Your screens remain visible behind the covers. Windows Hello verification releases all covers.")
+                : UiText.Get("背後の画面はそのままです。Windows Helloの本人確認で、このカバーだけを解除します。", "Your screen remains visible behind this cover. Windows Hello verification releases this cover only.");
             FeedbackText.Text = UiText.Get("「Windows Helloで解除」を押して本人確認してください。", "Select Unlock with Windows Hello to verify your identity.");
             HelloUnlockButton.IsDefault = true;
             UnlockButton.IsDefault = false;
@@ -51,6 +59,33 @@ public partial class OverlayWindow : Window
         Height = SystemParameters.PrimaryScreenHeight;
         Loaded += OnLoaded;
         _timer.Tick += OnTick;
+    }
+
+    internal void ShowCover()
+    {
+        try
+        {
+            Show();
+            if (_allDisplays)
+            {
+                var monitors = _getMonitors();
+                DisplayMonitors.Place(this, monitors.Single(m => m.IsPrimary));
+                foreach (var monitor in monitors.Where(m => !m.IsPrimary))
+                {
+                    var cover = new SecondaryCoverWindow(this);
+                    _secondaryCovers.Add(cover);
+                    DisplayMonitors.Place(cover, monitor);
+                    cover.Show();
+                    DisplayMonitors.Place(cover, monitor);
+                }
+                Activate();
+            }
+        }
+        catch
+        {
+            Finish(OverlayResult.Closed);
+            throw;
+        }
     }
 
     private void OnLoaded(object sender, RoutedEventArgs e)
@@ -78,12 +113,14 @@ public partial class OverlayWindow : Window
     {
         if (_duration is null)
         {
-            CountdownText.Text = UiText.Get("自動解除なし  /  主画面のみ", "No automatic release  /  Primary screen only");
+            CountdownText.Text = UiText.Get("自動解除なし", "No automatic release") + "  /  " + ScopeLabel;
             return;
         }
         var seconds = Math.Max(0, (int)Math.Ceiling((_duration.Value - _elapsed.Elapsed).TotalSeconds));
-        CountdownText.Text = UiText.Get($"自動解除まで {seconds / 60:00}:{seconds % 60:00}  /  プライマリ画面のみ", $"Automatic release in {seconds / 60:00}:{seconds % 60:00}  /  Primary screen only");
+        CountdownText.Text = UiText.Get($"自動解除まで {seconds / 60:00}:{seconds % 60:00}", $"Automatic release in {seconds / 60:00}:{seconds % 60:00}") + "  /  " + ScopeLabel;
     }
+
+    private string ScopeLabel => _allDisplays ? UiText.Get("すべてのモニター", "All monitors") : UiText.Get("主画面のみ", "Primary screen only");
 
     private void Unlock_Click(object sender, RoutedEventArgs e)
     {
@@ -138,8 +175,15 @@ public partial class OverlayWindow : Window
     {
         if (_closed) return;
         Result = result;
+        ReleaseSecondaryCovers();
         _allowClose = true;
         Close();
+    }
+
+    private void ReleaseSecondaryCovers()
+    {
+        foreach (var cover in _secondaryCovers) cover.Release();
+        _secondaryCovers.Clear();
     }
 
     protected override void OnClosing(CancelEventArgs e)
@@ -161,6 +205,7 @@ public partial class OverlayWindow : Window
     protected override void OnClosed(EventArgs e)
     {
         _closed = true;
+        ReleaseSecondaryCovers();
         _timer.Stop();
         _timer.Tick -= OnTick;
         _elapsed.Stop();

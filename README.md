@@ -10,7 +10,7 @@ A translucent desktop cover for background coding, builds, and other long-runnin
 
 Eight seconds, looping. The demo uses the real Windows cover and a test PIN. Background progress is synthetic; it does not demonstrate a live AI service or real Windows Hello authentication.
 
-> **This is a convenience screen cover, not an OS lock or a security boundary.** Your background remains visible. Task switching, other displays, and process termination can bypass it. Use your OS lock to protect access or sensitive information. GUI agents clicking or typing on the same desktop are not supported.
+> **This is a convenience screen cover, not an OS lock or a security boundary.** Your background remains visible. Task switching and process termination can bypass it; primary-only mode leaves other displays uncovered. Use your OS lock to protect access or sensitive information. GUI agents clicking or typing on the same desktop are not supported.
 
 ## Try it
 
@@ -72,7 +72,7 @@ The cover does not suspend processes. It is intended for command-line tools, bui
 
 Windows Hello returns a verification result, not your Windows PIN or biometric data. Cancellation and failure do not dismiss the cover. The separate app credential lasts for the current session and is not saved to disk. Do not reuse an important password: managed input strings cannot be guaranteed to disappear from memory.
 
-The cover applies to the primary display only. Ordinary close requests and Esc do not dismiss it. A display-configuration change dismisses it for recovery. On Windows, use **Ctrl+Alt+Del → Task Manager** to end AI Guard Lock if needed. Preview recovery details are in the bundled guide.
+On Windows, choose Primary screen only (the default) or All monitors in Screens to cover. Verify on the primary screen to release all covers. The selection lasts until the app exits. The macOS/Linux preview still covers only the primary display. Ordinary close requests and Esc do not dismiss it. A display-configuration change dismisses it for recovery. On Windows, use **Ctrl+Alt+Del → Task Manager** to end AI Guard Lock if needed. Preview recovery details are in the bundled guide.
 
 ## Feedback and development
 

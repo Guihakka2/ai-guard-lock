@@ -46,7 +46,7 @@ internal static class Program
             try
             {
                 if (_preview) await PreviewWindows();
-                else { CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("ja"); await TestWindows(); await TestWindowsHello(); await TestEnglish(); }
+                else { CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("ja"); await TestWindows(); await TestDisplayScope(); await TestWindowsHello(); await TestEnglish(); }
             }
             catch (Exception e) { Console.Error.WriteLine(e); exitCode = 1; }
             finally
@@ -244,6 +244,7 @@ internal static class Program
             await Task.Delay(50);
             Check(setup.Title == "AI Guard Lock — Setup", "English setup title");
             Check((string)Control<Button>(setup, "StartButton").Content == "Start screen cover", "English start button");
+            Check((string)((ComboBoxItem)Control<ComboBox>(setup, "DisplayChoice").Items[1]).Content == "All monitors", "English display scope option");
             Check(AutomationProperties.GetName(Control<PasswordBox>(setup, "NewPassword")) == "PIN or password", "English accessible PIN name");
             Render(setup, "setup-en");
             Click(setup, "StartButton");
@@ -298,6 +299,99 @@ internal static class Program
     }
 
     private static T Control<T>(Window window, string name) where T : FrameworkElement => (T)window.FindName(name);
+
+    private static async Task TestDisplayScope()
+    {
+        var native = DisplayMonitors.GetAll();
+        Check(native.Count >= 1 && native.Count(m => m.IsPrimary) == 1, "native monitor enumeration includes primary");
+        var primary = native.Single(m => m.IsPrimary);
+        MonitorBounds[] simulated = [primary, new(-800, -200, 0, 400, false)];
+        using var credential = new PasswordCredential(TestPassword);
+        var cover = new OverlayWindow(credential, null, null, true, () => simulated);
+        cover.ShowCover();
+        await Task.Delay(80);
+        var secondary = Application.Current.Windows.OfType<SecondaryCoverWindow>().Single();
+        Check(secondary.IsVisible && secondary.Topmost && secondary.AllowsTransparency && secondary.Owner == cover,
+            "all monitors creates owned translucent secondary cover");
+        var nativeRect = new TestRect();
+        GetWindowRect(new System.Windows.Interop.WindowInteropHelper(secondary).Handle, out nativeRect);
+        Check(nativeRect.Left == -800 && nativeRect.Top == -200 && nativeRect.Right == 0 && nativeRect.Bottom == 400,
+            "secondary uses full native bounds including negative coordinates");
+        secondary.Close();
+        Check(secondary.IsVisible, "secondary close cannot bypass authentication");
+        Control<PasswordBox>(cover, "UnlockPassword").Password = "wrong";
+        Click(cover, "UnlockButton");
+        Check(secondary.IsVisible && cover.IsVisible, "wrong password keeps every monitor covered");
+        await Task.Delay(1200);
+        Control<PasswordBox>(cover, "UnlockPassword").Password = TestPassword;
+        Click(cover, "UnlockButton");
+        Check(!cover.IsVisible && !secondary.IsVisible && cover.Result == OverlayResult.Unlocked,
+            "correct PIN releases all monitors");
+
+        foreach (var result in new[] { OverlayResult.DisplayChanged, OverlayResult.Closed })
+        {
+            using var nextCredential = new PasswordCredential(TestPassword);
+            cover = new OverlayWindow(nextCredential, null, null, true, () => simulated);
+            cover.ShowCover();
+            secondary = Application.Current.Windows.OfType<SecondaryCoverWindow>().Single();
+            cover.Finish(result);
+            Check(!secondary.IsVisible && !cover.IsVisible, $"{result} releases all monitors");
+        }
+        var hello = new FakeWindowsHello { Result = UserConsentVerificationResult.Verified };
+        cover = new OverlayWindow(null, null, hello, true, () => simulated);
+        cover.ShowCover();
+        secondary = Application.Current.Windows.OfType<SecondaryCoverWindow>().Single();
+        Click(cover, "HelloUnlockButton");
+        await Task.Delay(30);
+        Check(!secondary.IsVisible && cover.Result == OverlayResult.HelloUnlocked, "Hello success releases all monitors");
+
+        using var timedCredential = new PasswordCredential(TestPassword);
+        cover = new OverlayWindow(timedCredential, TimeSpan.FromMilliseconds(150), null, true, () => simulated);
+        cover.ShowCover();
+        secondary = Application.Current.Windows.OfType<SecondaryCoverWindow>().Single();
+        await Task.Delay(600);
+        Check(!secondary.IsVisible && cover.Result == OverlayResult.TimedOut, "timeout releases all monitors");
+
+        using var singleCredential = new PasswordCredential(TestPassword);
+        cover = new OverlayWindow(singleCredential, null, null, true, () => new[] { primary });
+        cover.ShowCover();
+        Check(cover.IsVisible && !Application.Current.Windows.OfType<SecondaryCoverWindow>().Any(), "all monitors works with one monitor");
+        cover.Finish(OverlayResult.Closed);
+
+        using var failedCredential = new PasswordCredential(TestPassword);
+        cover = new OverlayWindow(failedCredential, null, null, true,
+            () => new[] { primary, simulated[1], new MonitorBounds(10, 10, 10, 20, false) });
+        var failed = false;
+        try { cover.ShowCover(); }
+        catch (ArgumentException) { failed = true; }
+        Check(failed && !cover.IsVisible && !Application.Current.Windows.OfType<SecondaryCoverWindow>().Any(),
+            "partial startup failure releases primary and all secondary covers");
+
+        var setup = LocalSetup();
+        setup.Show();
+        await Task.Delay(50);
+        Control<ComboBox>(setup, "DisplayChoice").SelectedIndex = 1;
+        Control<CheckBox>(setup, "Acknowledge").IsChecked = true;
+        FillSetup(setup);
+        Click(setup, "StartButton");
+        await Task.Delay(80);
+        cover = CurrentOverlay();
+        Check(Application.Current.Windows.OfType<SecondaryCoverWindow>().Count() == native.Count - 1,
+            "setup all-monitor selection covers every connected monitor");
+        Check(Control<TextBlock>(cover, "CountdownText").Text.Contains("すべてのモニター"), "Japanese all-monitor countdown");
+        cover.Finish(OverlayResult.DisplayChanged);
+        Check(setup.IsVisible && Control<ComboBox>(setup, "DisplayChoice").SelectedIndex == 1, "selection retained after release");
+        FillSetup(setup);
+        Click(setup, "StartButton");
+        setup.Close();
+        Check(!Application.Current.Windows.OfType<SecondaryCoverWindow>().Any(), "closing setup releases all secondary covers");
+    }
+
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
+    private struct TestRect { public int Left, Top, Right, Bottom; }
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    [return: System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.Bool)]
+    private static extern bool GetWindowRect(nint window, out TestRect rect);
     private static void Click(Window window, string name) => Control<Button>(window, name).RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
     private static OverlayWindow CurrentOverlay() => Application.Current.Windows.OfType<OverlayWindow>().Single();
     private static void FillSetup(MainWindow setup)
@@ -342,6 +436,9 @@ internal static class Program
         Application.Current.MainWindow = setup;
         setup.Show();
         await Task.Delay(100);
+        var displayChoice = setup.FindName("DisplayChoice") as ComboBox;
+        Check(displayChoice is not null && displayChoice.Items.Count == 2 && displayChoice.SelectedIndex == 0,
+            "setup offers primary or all monitors and defaults to primary");
         Render(setup, "setup");
         FillSetup(setup);
         Click(setup, "StartButton");

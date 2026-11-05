@@ -136,9 +136,10 @@ public partial class MainWindow : Window
         var minutes = int.Parse((string)((ComboBoxItem)DurationChoice.SelectedItem).Tag, CultureInfo.InvariantCulture);
         try
         {
-            _overlay = new OverlayWindow(credential, minutes == 0 ? null : TimeSpan.FromMinutes(minutes), useHello ? _hello : null);
+            _overlay = new OverlayWindow(credential, minutes == 0 ? null : TimeSpan.FromMinutes(minutes), useHello ? _hello : null,
+                DisplayChoice.SelectedIndex == 1);
             _overlay.Closed += Overlay_Closed;
-            _overlay.Show();
+            _overlay.ShowCover();
             Hide();
         }
         catch (Exception)

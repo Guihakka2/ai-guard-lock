@@ -1,8 +1,8 @@
 AI Guard Lock — Windows portable guide
 
-Cover the primary display with a translucent window while background work continues.
+Choose Primary screen only or All monitors in Screens to cover while background work continues.
 This is not an OS lock or an access-control boundary. The background stays visible.
-Task switching, other displays and process termination can bypass it. Use the OS
+Task switching and process termination can bypass it; primary-only mode leaves other displays uncovered. Use the OS
 lock to protect access or sensitive information. GUI agents on the same desktop
 are not supported. Sleep, automatic locking and power policies are not changed.
 
@@ -23,6 +23,7 @@ USE
 Test Windows Hello or choose an app PIN/password. Use 4–12 ASCII digits for a PIN,
 or 8–128 characters for a password, avoiding whitespace-only input. Read and
 acknowledge the limits, then start the cover. Return with Hello or the same app PIN.
+Verify on the primary screen to release all covers. Primary screen only is the default; the selection lasts until the app exits.
 The app PIN is separate from your Windows PIN and lasts only for this session.
 Do not reuse an important password. Credentials are not saved to disk. Windows
 Hello returns a verification result, not your PIN or biometric data.
