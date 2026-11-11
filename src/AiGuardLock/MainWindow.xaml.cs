@@ -22,7 +22,39 @@ public partial class MainWindow : Window
     {
         _hello = hello;
         InitializeComponent();
+        RefreshDisplays();
+        DisplayChoice.DropDownOpened += (_, _) => RefreshDisplays();
         Loaded += async (_, _) => await RefreshHelloAsync();
+    }
+
+    private void RefreshDisplays()
+    {
+        var selected = (DisplayChoice.SelectedItem as ComboBoxItem)?.Tag;
+        var index = DisplayChoice.SelectedIndex;
+        try
+        {
+            var monitors = DisplayMonitors.GetAll();
+            while (DisplayChoice.Items.Count > 2) DisplayChoice.Items.RemoveAt(2);
+            for (var i = 0; i < monitors.Count; i++)
+            {
+                var monitor = monitors[i];
+                var label = UiText.Get($"モニター {i + 1}", $"Monitor {i + 1}");
+                if (monitor.IsPrimary) label += UiText.Get("（主画面）", " (primary)");
+                var item = new ComboBoxItem
+                {
+                    Content = $"{label} — {monitor.Right - monitor.Left} × {monitor.Bottom - monitor.Top} ({monitor.Left}, {monitor.Top})",
+                    Tag = monitor
+                };
+                DisplayChoice.Items.Add(item);
+                if (selected is MonitorBounds previous && previous == monitor) DisplayChoice.SelectedItem = item;
+            }
+            if (selected is not MonitorBounds) DisplayChoice.SelectedIndex = index;
+            // A disconnected selection must be chosen again, never silently replaced.
+        }
+        catch (Exception)
+        {
+            StatusText.Text = UiText.Get("画面一覧を取得できません。もう一度開いてください。", "Could not list monitors. Open the list to retry.");
+        }
     }
 
     private async void CheckHello_Click(object sender, RoutedEventArgs e) => await RefreshHelloAsync();
@@ -98,6 +130,11 @@ public partial class MainWindow : Window
     private void Start_Click(object sender, RoutedEventArgs e)
     {
         if (_overlay is not null || _helloBusy) return;
+        if (DisplayChoice.SelectedIndex < 0)
+        {
+            StatusText.Text = UiText.Get("カバーする画面を選択してください。", "Select a monitor to cover.");
+            return;
+        }
         if (Acknowledge.IsChecked != true)
         {
             StatusText.Text = UiText.Get("注意事項を確認して、チェックを入れてください。", "Read the notices and check the acknowledgment box.");
@@ -137,7 +174,8 @@ public partial class MainWindow : Window
         try
         {
             _overlay = new OverlayWindow(credential, minutes == 0 ? null : TimeSpan.FromMinutes(minutes), useHello ? _hello : null,
-                DisplayChoice.SelectedIndex == 1);
+                DisplayChoice.SelectedIndex == 1,
+                selectedMonitor: (DisplayChoice.SelectedItem as ComboBoxItem)?.Tag as MonitorBounds?);
             _overlay.Closed += Overlay_Closed;
             _overlay.ShowCover();
             Hide();

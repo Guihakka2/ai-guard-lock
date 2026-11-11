@@ -2,6 +2,7 @@ using System.Globalization;
 using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.VisualTree;
+using Avalonia.LogicalTree;
 using AiGuardLock.Core;
 using AiGuardLock.CrossPlatform;
 using Avalonia;
@@ -73,6 +74,9 @@ internal static class Program
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("ja");
             var setup = new SetupWindow();
             setup.Show();
+            var displays = setup.GetLogicalDescendants().OfType<ComboBox>().SingleOrDefault(control => control != setup.Duration);
+            Check(displays is not null && displays.Items.Count == setup.Screens.All.Count + 1,
+                "setup lists individual monitors plus primary default");
             Check(setup.Icon is not null && setup.Cover is null, "setup icon loads and no cover starts automatically");
             setup.Pin.Text = "0482"; setup.Confirmation.Text = "0482";
             setup.StartCover();
@@ -83,6 +87,19 @@ internal static class Program
             Check(setup.Cover is null && setup.Confirmation.Text == string.Empty, "mismatched PIN rejected and cleared");
             setup.Close();
             Check(setup.Pin.Text == string.Empty, "setup clears PIN on close");
+            using var selectedSession = new CoverSession(new PasswordCredential("0482"), null);
+            var selectedScreen = setup.Screens.All.Last();
+            var selectedView = new CoverWindow(selectedSession, selectedScreen);
+            selectedView.Show();
+            Check(selectedView.Position == selectedScreen.Bounds.Position
+                && selectedView.Width == selectedScreen.Bounds.Width / selectedScreen.Scaling
+                && selectedView.Height == selectedScreen.Bounds.Height / selectedScreen.Scaling,
+                "selected monitor uses native position and scaled full bounds");
+            Check(selectedView.GetLogicalDescendants().OfType<TextBlock>().Any(text => text.Text?.Contains("選択したモニター") == true),
+                "countdown describes selected monitor");
+            selectedView.Pin.Text = "0482";
+            selectedView.Submit();
+            Check(selectedView.Result == CoverResult.Unlocked && !selectedView.IsVisible, "selected monitor unlocks with PIN");
             using var viewSession = new CoverSession(new PasswordCredential("0482"), null, time);
             var view = new CoverWindow(viewSession);
             Check(view.WindowDecorations == Avalonia.Controls.WindowDecorations.None, "cover has no operating-system window decorations");

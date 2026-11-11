@@ -4,7 +4,7 @@
 
 A translucent desktop cover for background coding, builds, and other long-running work. Return with Windows Hello or a temporary app PIN.
 
-[**Download 1.1.0 →**](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview) · [日本語](README.ja.md) · [Questions & ideas](https://github.com/Guihakka2/ai-guard-lock/discussions) · [Report a bug](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)
+[**Download 1.1.1 →**](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.1-preview) · [日本語](README.ja.md) · [Questions & ideas](https://github.com/Guihakka2/ai-guard-lock/discussions) · [Report a bug](https://github.com/Guihakka2/ai-guard-lock/issues/new?template=bug_report.md)
 
 ![English-language cover shown and dismissed with a test PIN](docs/media/demo-en.gif)
 
@@ -14,7 +14,7 @@ Eight seconds, looping. The demo uses the real Windows cover and a test PIN. Bac
 
 ## Try it
 
-**[1.1.0 is available](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.0-preview)** with English and Japanese UI. Choose your OS and CPU below.
+**[1.1.1 is available](https://github.com/Guihakka2/ai-guard-lock/releases/tag/v1.1.1-preview)** with English and Japanese UI. Choose your OS and CPU below.
 
 1. Download the archive matching your OS and CPU.
 2. On Windows, extract the complete ZIP and open `AiGuardLock.exe`.
@@ -37,7 +37,7 @@ Eight seconds, looping. The demo uses the real Windows cover and a test PIN. Bac
 | Linux Intel / AMD | `linux-x64-preview.tar.gz` | App PIN/password | Preview; X11/XWayland with compositing |
 | Linux ARM64 | `linux-arm64-preview.tar.gz` | App PIN/password | Preview; physical GUI unverified |
 
-Each archive has a SHA-256 sidecar. New 1.1.0 packages include the project MIT license, runtime licenses, and dependency notices.
+Each archive has a SHA-256 sidecar. New 1.1.1 packages include the project MIT license, runtime licenses, and dependency notices.
 
 ## English and Japanese
 
@@ -72,7 +72,7 @@ The cover does not suspend processes. It is intended for command-line tools, bui
 
 Windows Hello returns a verification result, not your Windows PIN or biometric data. Cancellation and failure do not dismiss the cover. The separate app credential lasts for the current session and is not saved to disk. Do not reuse an important password: managed input strings cannot be guaranteed to disappear from memory.
 
-On Windows, choose Primary screen only (the default) or All monitors in Screens to cover. Verify on the primary screen to release all covers. The selection lasts until the app exits. The macOS/Linux preview still covers only the primary display. Ordinary close requests and Esc do not dismiss it. A display-configuration change dismisses it for recovery. On Windows, use **Ctrl+Alt+Del → Task Manager** to end AI Guard Lock if needed. Preview recovery details are in the bundled guide.
+On Windows, choose Primary screen only (the default), an individual monitor, or All monitors in Screens to cover. Verify on the selected screen, or on the primary screen when covering all monitors. The selection lasts until the app exits. The macOS/Linux preview lets you choose the primary display or an individual monitor. Ordinary close requests and Esc do not dismiss it. A display-configuration change dismisses it for recovery. On Windows, use **Ctrl+Alt+Del → Task Manager** to end AI Guard Lock if needed. Preview recovery details are in the bundled guide.
 
 ## Feedback and development
 

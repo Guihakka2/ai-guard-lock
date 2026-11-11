@@ -303,9 +303,32 @@ internal static class Program
     private static async Task TestDisplayScope()
     {
         var native = DisplayMonitors.GetAll();
+        var selectionSetup = LocalSetup();
+        Check(Control<ComboBox>(selectionSetup, "DisplayChoice").Items.Count == native.Count + 2,
+            "setup lists each connected monitor alongside primary and all");
+        selectionSetup.Close();
         Check(native.Count >= 1 && native.Count(m => m.IsPrimary) == 1, "native monitor enumeration includes primary");
         var primary = native.Single(m => m.IsPrimary);
         MonitorBounds[] simulated = [primary, new(-800, -200, 0, 400, false)];
+        using var selectedCredential = new PasswordCredential(TestPassword);
+        var selectedCover = new OverlayWindow(selectedCredential, null, null,
+            getMonitors: () => simulated, selectedMonitor: simulated[1]);
+        selectedCover.ShowCover();
+        await Task.Delay(80);
+        GetWindowRect(new System.Windows.Interop.WindowInteropHelper(selectedCover).Handle, out var selectedRect);
+        Check(selectedRect.Left == -800 && selectedRect.Top == -200 && selectedRect.Right == 0 && selectedRect.Bottom == 400,
+            "selected monitor places authentication cover at full negative native bounds");
+        Check(!Application.Current.Windows.OfType<SecondaryCoverWindow>().Any(), "selected monitor leaves other screens uncovered");
+        Control<PasswordBox>(selectedCover, "UnlockPassword").Password = TestPassword;
+        Click(selectedCover, "UnlockButton");
+        Check(!selectedCover.IsVisible && selectedCover.Result == OverlayResult.Unlocked, "selected monitor unlocks with PIN");
+        using var missingCredential = new PasswordCredential(TestPassword);
+        var missingCover = new OverlayWindow(missingCredential, null, null,
+            getMonitors: () => new[] { primary }, selectedMonitor: simulated[1]);
+        var missingRejected = false;
+        try { missingCover.ShowCover(); }
+        catch (InvalidOperationException) { missingRejected = true; }
+        Check(missingRejected && !missingCover.IsVisible, "disconnected selection never covers another monitor");
         using var credential = new PasswordCredential(TestPassword);
         var cover = new OverlayWindow(credential, null, null, true, () => simulated);
         cover.ShowCover();
@@ -437,7 +460,7 @@ internal static class Program
         setup.Show();
         await Task.Delay(100);
         var displayChoice = setup.FindName("DisplayChoice") as ComboBox;
-        Check(displayChoice is not null && displayChoice.Items.Count == 2 && displayChoice.SelectedIndex == 0,
+        Check(displayChoice is not null && displayChoice.Items.Count == DisplayMonitors.GetAll().Count + 2 && displayChoice.SelectedIndex == 0,
             "setup offers primary or all monitors and defaults to primary");
         Render(setup, "setup");
         FillSetup(setup);

@@ -24,6 +24,7 @@ public partial class OverlayWindow : Window
     private bool _closed;
     private bool _allowClose;
     private readonly bool _allDisplays;
+    private readonly MonitorBounds? _selectedMonitor;
     private readonly Func<IReadOnlyList<MonitorBounds>> _getMonitors;
     private readonly List<SecondaryCoverWindow> _secondaryCovers = new();
     public OverlayResult Result { get; private set; } = OverlayResult.Closed;
@@ -31,7 +32,8 @@ public partial class OverlayWindow : Window
     public OverlayWindow(PasswordCredential credential, TimeSpan? duration) : this(credential, duration, null) { }
 
     internal OverlayWindow(PasswordCredential? credential, TimeSpan? duration, IWindowsHelloService? hello,
-        bool allDisplays = false, Func<IReadOnlyList<MonitorBounds>>? getMonitors = null)
+        bool allDisplays = false, Func<IReadOnlyList<MonitorBounds>>? getMonitors = null,
+        MonitorBounds? selectedMonitor = null)
     {
         if (credential is null && hello is null) throw new ArgumentException(UiText.Get("解除方法が必要です。", "An unlock method is required."));
         if (duration is { } limit && (limit <= TimeSpan.Zero || limit > TimeSpan.FromHours(1)))
@@ -40,6 +42,7 @@ public partial class OverlayWindow : Window
         _hello = hello;
         _duration = duration;
         _allDisplays = allDisplays;
+        _selectedMonitor = selectedMonitor;
         _getMonitors = getMonitors ?? DisplayMonitors.GetAll;
         InitializeComponent();
         LocalUnlockPanel.Visibility = credential is null ? Visibility.Collapsed : Visibility.Visible;
@@ -65,7 +68,11 @@ public partial class OverlayWindow : Window
     {
         try
         {
+            if (_selectedMonitor is { } selected && !_getMonitors().Contains(selected))
+                throw new InvalidOperationException("The selected monitor is no longer available.");
+            if (_selectedMonitor is { } target) DisplayMonitors.Place(this, target);
             Show();
+            if (_selectedMonitor is { } shownTarget) DisplayMonitors.Place(this, shownTarget);
             if (_allDisplays)
             {
                 var monitors = _getMonitors();
@@ -120,7 +127,9 @@ public partial class OverlayWindow : Window
         CountdownText.Text = UiText.Get($"自動解除まで {seconds / 60:00}:{seconds % 60:00}", $"Automatic release in {seconds / 60:00}:{seconds % 60:00}") + "  /  " + ScopeLabel;
     }
 
-    private string ScopeLabel => _allDisplays ? UiText.Get("すべてのモニター", "All monitors") : UiText.Get("主画面のみ", "Primary screen only");
+    private string ScopeLabel => _allDisplays ? UiText.Get("すべてのモニター", "All monitors")
+        : _selectedMonitor is not null ? UiText.Get("選択したモニター", "Selected monitor")
+        : UiText.Get("主画面のみ", "Primary screen only");
 
     private void Unlock_Click(object sender, RoutedEventArgs e)
     {

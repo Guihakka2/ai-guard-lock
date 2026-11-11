@@ -32,7 +32,8 @@ public sealed class SetupWindow : Window
 {
     internal readonly TextBox Pin = Ui.Secret();
     internal readonly TextBox Confirmation = Ui.Secret();
-    internal readonly CheckBox Acknowledge = new() { Content = Ui.Text(UiText.Get("主画面のみ対応で、OSのロックではないことを確認しました。", "I understand that this covers only the primary screen and is not an OS lock.")) };
+    internal readonly CheckBox Acknowledge = new() { Content = Ui.Text(UiText.Get("選択した画面のみを覆い、OSのロックではないことを確認しました。", "I understand that this covers only the selected screen and is not an OS lock.")) };
+    internal readonly ComboBox DisplayChoice = new() { HorizontalAlignment = HorizontalAlignment.Stretch };
     internal readonly ComboBox Duration = new()
     {
         ItemsSource = new[] { UiText.Get("しない（PINで解除）", "Never (unlock with PIN)"), UiText.Get("2分（動作確認用）", "2 minutes (test first)"), UiText.Get("10分", "10 minutes"), UiText.Get("60分", "60 minutes") },
@@ -48,6 +49,7 @@ public sealed class SetupWindow : Window
         AutomationProperties.SetName(Pin, UiText.Get("PIN・パスワード", "PIN or password"));
         AutomationProperties.SetName(Confirmation, UiText.Get("確認用のPIN・パスワード", "Confirm PIN or password"));
         AutomationProperties.SetName(Duration, UiText.Get("自動解除", "Automatic unlock"));
+        AutomationProperties.SetName(DisplayChoice, UiText.Get("カバーする画面", "Screen to cover"));
         Title = "AI Guard Lock — macOS / Linux";
         Width = 620; Height = 800; MinWidth = 420; MinHeight = 400;
         WindowStartupLocation = WindowStartupLocation.CenterScreen;
@@ -69,6 +71,8 @@ public sealed class SetupWindow : Window
         body.Children.Add(Ui.Text(UiText.Get("今回のカバー表示中だけ有効です。ファイルには保存しません。", "Valid only for this cover session. Never saved to a file."), 12, "#52697A"));
         body.Children.Add(Ui.Text(UiText.Get("自動解除", "Automatic unlock")));
         body.Children.Add(Duration);
+        body.Children.Add(Ui.Text(UiText.Get("カバーする画面", "Screen to cover")));
+        body.Children.Add(DisplayChoice);
         body.Children.Add(Acknowledge);
         body.Children.Add(Ui.Text(UiText.Get("背景のCLI・API処理を想定しています。画面操作を行うAIとは併用できません。OSのスリープ設定は変更しません。", "Designed for background CLI and API tasks. Do not use with AI that controls the screen. OS sleep settings are unchanged."), 12, "#52697A"));
         body.Children.Add(Status);
@@ -79,12 +83,49 @@ public sealed class SetupWindow : Window
         exit.Click += (_, _) => Close();
         body.Children.Add(exit);
         Content = new ScrollViewer { Content = body };
-        Opened += (_, _) => Pin.Focus();
+        DisplayChoice.Items.Add(new ComboBoxItem { Content = UiText.Get("主画面のみ", "Primary screen only") });
+        DisplayChoice.SelectedIndex = 0;
+        DisplayChoice.DropDownOpened += (_, _) => RefreshDisplays();
+        Opened += (_, _) => { RefreshDisplays(); Pin.Focus(); };
+    }
+
+    private void RefreshDisplays()
+    {
+        var selected = (DisplayChoice.SelectedItem as ComboBoxItem)?.Tag as Screen;
+        var primary = DisplayChoice.SelectedIndex == 0;
+        try
+        {
+            var screens = Screens.All.ToArray();
+            while (DisplayChoice.Items.Count > 1) DisplayChoice.Items.RemoveAt(1);
+            for (var i = 0; i < screens.Length; i++)
+            {
+                var screen = screens[i];
+                var label = UiText.Get($"モニター {i + 1}", $"Monitor {i + 1}");
+                if (screen.IsPrimary) label += UiText.Get("（主画面）", " (primary)");
+                var item = new ComboBoxItem
+                {
+                    Content = $"{label} — {screen.Bounds.Width} × {screen.Bounds.Height} ({screen.Bounds.X}, {screen.Bounds.Y})",
+                    Tag = screen
+                };
+                DisplayChoice.Items.Add(item);
+                if (screen.Equals(selected)) DisplayChoice.SelectedItem = item;
+            }
+            if (primary) DisplayChoice.SelectedIndex = 0;
+        }
+        catch (Exception)
+        {
+            Status.Text = UiText.Get("画面一覧を取得できません。もう一度開いてください。", "Could not list monitors. Open the list to retry.");
+        }
     }
 
     internal void StartCover()
     {
         if (Cover is not null) return;
+        if (DisplayChoice.SelectedIndex < 0)
+        {
+            Status.Text = UiText.Get("カバーする画面を選択してください。", "Select a monitor to cover.");
+            return;
+        }
         if (Acknowledge.IsChecked != true) { Status.Text = UiText.Get("注意事項を確認してチェックを入れてください。", "Read the limitations and check the acknowledgment box."); return; }
         if (!string.Equals(Pin.Text, Confirmation.Text, StringComparison.Ordinal))
         {
@@ -98,7 +139,8 @@ public sealed class SetupWindow : Window
         var minutes = Duration.SelectedIndex switch { 1 => 2, 2 => 10, 3 => 60, _ => 0 };
         try
         {
-            var cover = new CoverWindow(new CoverSession(credential, minutes == 0 ? null : TimeSpan.FromMinutes(minutes)));
+            var cover = new CoverWindow(new CoverSession(credential, minutes == 0 ? null : TimeSpan.FromMinutes(minutes)),
+                (DisplayChoice.SelectedItem as ComboBoxItem)?.Tag as Screen);
             Cover = cover;
             cover.Closed += (_, _) =>
             {
@@ -141,6 +183,7 @@ public sealed class SetupWindow : Window
 internal sealed class CoverWindow : Window
 {
     private readonly CoverSession _session;
+    private readonly Screen? _selectedScreen;
     private Screens? _screens;
     private readonly DispatcherTimer _timer = new() { Interval = TimeSpan.FromMilliseconds(250) };
     private readonly TextBlock _countdown = Ui.Text("", 13, "#B5C6D6");
@@ -149,9 +192,10 @@ internal sealed class CoverWindow : Window
     internal readonly TextBlock Feedback = Ui.Text(UiText.Get("開始時に設定したPIN・パスワードを入力してください。", "Enter the PIN or password you set when starting the cover."), 13, "#FFD997");
     internal CoverResult Result => _session.Result;
 
-    public CoverWindow(CoverSession session)
+    public CoverWindow(CoverSession session, Screen? selectedScreen = null)
     {
         _session = session;
+        _selectedScreen = selectedScreen;
         AutomationProperties.SetName(Pin, UiText.Get("PIN・パスワード", "PIN or password"));
         Title = UiText.Get("AI Guard Lock — 半透明カバー", "AI Guard Lock — Translucent cover");
         Icon = Ui.Icon();
@@ -170,7 +214,7 @@ internal sealed class CoverWindow : Window
         Unlock.Click += (_, _) => Submit();
         body.Children.Add(Unlock);
         body.Children.Add(_countdown);
-        body.Children.Add(Ui.Text(UiText.Get("OSのロックではありません。復旧時はmacOSの強制終了、Linuxのシステムモニターからこのアプリを終了できます。", "This is not an OS lock. To recover, quit this app using Force Quit on macOS or System Monitor on Linux."), 12, "#B5C6D6"));
+        body.Children.Add(Ui.Text(UiText.Get("OSのロックではありません。", "This is not an OS lock."), 12, "#B5C6D6"));
         Content = new Grid
         {
             Margin = new Thickness(24),
@@ -194,7 +238,9 @@ internal sealed class CoverWindow : Window
 
     private void OnOpened(object? sender, EventArgs e)
     {
-        var screen = Screens.Primary ?? Screens.ScreenFromWindow(this);
+        var screen = _selectedScreen is null
+            ? Screens.Primary ?? Screens.ScreenFromWindow(this)
+            : Screens.All.FirstOrDefault(candidate => candidate.Equals(_selectedScreen));
         if (screen is null) { Finish(CoverResult.DisplayChanged); return; }
         Position = screen.Bounds.Position;
         Width = screen.Bounds.Width / screen.Scaling;
@@ -227,9 +273,10 @@ internal sealed class CoverWindow : Window
         _session.Tick();
         if (Result != CoverResult.Active) { Close(); return; }
         Unlock.IsEnabled = _session.CanRetry;
-        _countdown.Text = _session.Remaining is { } remaining
-            ? UiText.Get($"自動解除まで {Math.Ceiling(remaining.TotalSeconds):0}秒 / 主画面のみ", $"Automatic unlock in {Math.Ceiling(remaining.TotalSeconds):0}s / Primary screen only")
-            : UiText.Get("自動解除なし / 主画面のみ", "No automatic unlock / Primary screen only");
+        var scope = _selectedScreen is null ? UiText.Get("主画面のみ", "Primary screen only") : UiText.Get("選択したモニター", "Selected monitor");
+        _countdown.Text = (_session.Remaining is { } remaining
+            ? UiText.Get($"自動解除まで {Math.Ceiling(remaining.TotalSeconds):0}秒", $"Automatic unlock in {Math.Ceiling(remaining.TotalSeconds):0}s")
+            : UiText.Get("自動解除なし", "No automatic unlock")) + " / " + scope;
     }
 
     private void OnScreensChanged(object? sender, EventArgs e) => Finish(CoverResult.DisplayChanged);

@@ -1,6 +1,6 @@
 AI Guard Lock — macOS / Linux preview guide
 
-This preview covers the primary display with a translucent window and uses a
+This preview covers a selected display with a translucent window and uses a
 temporary app PIN/password. Touch ID, PAM and OS-login authentication are not
 supported. This is not an OS lock or a security boundary. The background remains
 visible; task switching, other monitors and process termination can bypass it.
@@ -28,6 +28,8 @@ macOS: open "AI Guard Lock.app" --args --language=en
 USE AND RECOVERY
 Set a 4–12 ASCII-digit PIN, or an 8–128 character password that is not only
 whitespace. Acknowledge the limits, start the cover, and return with the same PIN.
+Choose the primary display or an individual monitor in Screen to cover.
+Verify on that monitor to unlock. Other monitors remain uncovered.
 The credential lasts for the session and is not saved to disk. Managed input
 strings cannot be guaranteed to disappear from memory. Do not reuse important
 passwords. For a first preview trial, use the optional 2-minute automatic dismissal.

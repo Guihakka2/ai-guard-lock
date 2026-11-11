@@ -46,7 +46,7 @@
                 <ComboBoxItem Content="{local:Tr '主画面のみ', 'Primary screen only'}" />
                 <ComboBoxItem Content="{local:Tr 'すべてのモニター', 'All monitors'}" />
             </ComboBox>
-            <TextBlock Text="{local:Tr 'すべてのモニターを選んだ場合も、主画面で本人確認するとまとめて解除します。', 'Verify on the primary screen to release all covers, including when all monitors are selected.'}" FontSize="12" Foreground="#52697A" Margin="0,0,0,16" />
+            <TextBlock Text="{local:Tr '選択した画面で本人確認してください。すべてのモニターの場合は主画面でまとめて解除します。', 'Verify on the selected screen to release its cover. For all monitors, verify on the primary screen.'}" FontSize="12" Foreground="#52697A" Margin="0,0,0,16" />
             <Label Content="{local:Tr '自動解除', 'Automatic release'}" Target="{Binding ElementName=DurationChoice}" Padding="0,0,0,6" />
             <ComboBox x:Name="DurationChoice" SelectedIndex="0" Padding="10,8" AutomationProperties.Name="{local:Tr '自動解除までの時間', 'Time until automatic release'}">
                 <ComboBoxItem Content="{local:Tr 'しない（本人確認で解除）', 'Never (verify to unlock)'}" Tag="0" />
@@ -55,9 +55,9 @@
                 <ComboBoxItem Content="{local:Tr '60分', '60 minutes'}" Tag="60" />
             </ComboBox>
             <CheckBox x:Name="Acknowledge" Margin="0,20,0,10" VerticalContentAlignment="Center">
-                <TextBlock Text="{local:Tr '画面操作を行うAIとは併用できないことと、復旧方法を確認しました。', 'I understand this cannot run alongside AI that controls the screen, and I have read the recovery steps.'}" />
+                <TextBlock Text="{local:Tr '画面操作を行うAIとは併用できないことを確認しました。', 'I understand this cannot run alongside AI that controls the screen.'}" />
             </CheckBox>
-            <TextBlock x:Name="StatusText" Text="{local:Tr 'PIN・パスワードを忘れた場合は Ctrl+Alt+Del → タスクマネージャーから AI Guard Lock を終了してください。', 'If you forget the PIN or password, press Ctrl+Alt+Del, open Task Manager and end AI Guard Lock.'}" Foreground="#52697A" MinHeight="44" Margin="0,4,0,8" AutomationProperties.LiveSetting="Polite" />
+            <TextBlock x:Name="StatusText" Text="{local:Tr 'カバーする画面と解除方法を選択してください。', 'Choose the screen to cover and how to unlock it.'}" Foreground="#52697A" MinHeight="44" Margin="0,4,0,8" AutomationProperties.LiveSetting="Polite" />
             <Button x:Name="StartButton" Content="{local:Tr '半透明カバーを開始', 'Start screen cover'}" Background="#087E79" Foreground="White" IsDefault="True" Click="Start_Click" />
             <Button Content="{local:Tr '終了', 'Exit'}" Margin="0,10,0,0" Click="Exit_Click" />
         </StackPanel>

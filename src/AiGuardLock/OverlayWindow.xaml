@@ -31,7 +31,7 @@
                     <Border BorderBrush="#415C70" BorderThickness="0,1,0,0" Padding="0,18,0,0">
                         <StackPanel>
                             <TextBlock Text="{local:Tr '半透明スクリーンカバー', 'Translucent screen cover'}" Foreground="White" FontWeight="SemiBold" />
-                            <TextBlock Text="{local:Tr 'Windowsのロック機能ではありません。復旧が必要な場合は Ctrl+Alt+Del からタスクマネージャーを開けます。', 'This is not the Windows lock screen. For recovery, press Ctrl+Alt+Del and open Task Manager.'}" Foreground="#B5C6D6" FontSize="12" Margin="0,8,0,0" />
+                            <TextBlock Text="{local:Tr 'Windowsのロック機能ではありません。', 'This is not the Windows lock screen.'}" Foreground="#B5C6D6" FontSize="12" Margin="0,8,0,0" />
                         </StackPanel>
                     </Border>
                 </StackPanel>
